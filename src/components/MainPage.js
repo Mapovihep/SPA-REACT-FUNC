@@ -3,64 +3,59 @@ import React, {useState, useEffect, getState} from 'react'
 import addingPost from "../actions/MainPageActions"
 import postAction from "../actions/MainPageActions"
 import { Button, FormControl, IconButton, Input, List, ListItem, ListItemText } from "@mui/material"
-import { DeleteIcon } from "@mui/icons-material/Delete"
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Post } from "./MainPageParts/Post"
+import { NorthWest } from "@mui/icons-material"
 
-const MainPage = () => {
-    const dispatch = useDispatch();
-    // localStorage.clear();
-    // const newR = ['Unos Posto', 'Duos Posto', 'Trez posto, MAMA MIA!!'];
-    // localStorage.setItem('Новые посты', JSON.stringify(newR));
-    //const newLoadedPosts = ['Unos Posto', 'Duos Posto', 'Trez posto, MAMA MIA!!'] 
-    const [ newPosts, setNewPosts] = useState(JSON.parse(localStorage.getItem('Новые посты')));
+const MainPage = (props) => {
+    const postFromState = useSelector((state) => state.page.posts);
+    console.log(postFromState);
+    // const [posts, setPosts] = useState(JSON.parse(localStorage.getItem('initial posts')));
+    const [posts, setPosts] = useState(postFromState);
 
-
-    const someNewPosts = newPosts.map(newPost=> 
-    <ListItem>
-        <ListItemText primary={newPost} key={Math.random()} endIcon={ <DeleteIcon />}>
-            <IconButton aria-label="delete">
-                <DeleteIcon />
-            </IconButton>
-        </ListItemText>
-    </ListItem>);
-    
     useEffect(()=>{
-        localStorage.clear();
-        localStorage.setItem('Новые посты', JSON.stringify(newPosts));
-        
-    }, [newPosts])
-    
+        localStorage.setItem('initial posts', JSON.stringify(posts));
+    }, [posts])
 
     const addPost = (event) => {
-        const inputForm = event.currentTarget.querySelector('input');
-        if(event.type === 'submit'){
-        event.preventDefault();
-        if(inputForm.value !== ''){
-            setNewPosts([
-                ...newPosts,
-                inputForm.value
-            ],
-            inputForm.value=''
-            )      
-        }
+        let current=event.currentTarget;
+        if(event.key === 'Enter'){
+            setPosts([
+                ...posts,
+                current.querySelector('input').value
+            ],  
+            props.dispatch(postAction('ADD_POST', current.querySelector('input').value)),
+            current.querySelector('input').value='')
+        }else{
+            if(event.type === "click"){
+                setPosts([
+                    ...posts,
+                    current.parentNode.querySelector('input').value
+                ],
+                props.dispatch(postAction('ADD_POST', current.querySelector('input').value)),
+                current.parentNode.querySelector('input').value='',
+            )}
         }
     }
-
+    
+        const someNewPosts = posts.map(newPost=> 
+        <Post text = {newPost} delete={postAction} key={Math.random()}></Post>);
     return (
         <div>
-            <FormControl
-            fullWidth
-            onSubmit={addPost}
-            onKeyPress={addPost}>
-                <Input                
-                    type="text"
-                    placeholder="Введи-ка сюда свой пост"
-                    style={{margin: "20px", height: "30px"}}
-                ></Input>
-                <Button variant="contained">Contained</Button>
-            </FormControl>
+            <Input 
+                onChange={addPost}
+                onKeyPress={addPost}            
+                type="text"
+                placeholder="Введи-ка сюда свой пост"
+                style={{margin: "20px", width: "75%"}}
+            ></Input>
+            <Button
+                onClick={addPost}
+                variant="contained"
+            >Contained</Button>
             <List>
                 {someNewPosts}
-            </List>
+            </List>            
             {/* <form
             onSubmit={addPost}
             onKeyPress={addPost}>

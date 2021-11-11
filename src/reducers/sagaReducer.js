@@ -1,6 +1,9 @@
 const SET_PEOPLE = 'SET_PEOPLE'
 const SET_PLANETS = 'SET_PLANETS'
-const initialState = {}
+const initialState = {
+    people: [],
+    posts: []
+}
 export const sagaReducer = (state = initialState, action) =>{
        switch (action.type) {
             //FROM SAGA
@@ -11,7 +14,7 @@ export const sagaReducer = (state = initialState, action) =>{
             }
         case SET_PLANETS: 
             return { ...state,
-                    planets: [...state.planets,
+                    planets: [...state.posts,
                     ...action.payload]
             }
             //FROM SAGA

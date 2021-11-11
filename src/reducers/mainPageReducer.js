@@ -16,9 +16,16 @@ export const mainPageReducer = (state = initialState, action) =>{
                 addedPost: action.payload,
             };
         case DEL_POST:
+            let neededEl = 0;
+            for(let el of state.posts){
+                if(el===action.payload){
+                    neededEl = el;
+                    console.log(neededEl); 
+                }
+            }
             return{
                 ...state,
-                addedPost: action.payload,
+                deletedPost: action.payload,
             };
         default:
             return state;

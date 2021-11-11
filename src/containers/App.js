@@ -1,8 +1,6 @@
 import { AppBar, Typography, Toolbar, Button, ButtonGroup  } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu'
-import { Box } from "@mui/system";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,14 +8,16 @@ import {
   Link
 } from "react-router-dom";
 
-
 import LoginPage from "../components/LoginPage";
 import MainPage from "../components/MainPage";
 import ProfilePage from "../components/ProfilePage";
 import SignUpPage from "../components/SignUpPage";
+import store from "../store";
 
 const App = props => {
-  const store = useSelector(store => store);
+
+  const [posts, setPostsToState] = useState(props.store)
+  console.log()
   return (
     <Router>
       <div className="header_container__App">
@@ -36,10 +36,9 @@ const App = props => {
             {/* <Route path="/profilePage" element={<ProfilePage />} ></Route> */}
             <Route path="/loginPage" element={<LoginPage />} ></Route>
             <Route path="/signUpPage" element={<SignUpPage />} ></Route>
-            <Route path="/" element={<MainPage />} ></Route>
+            <Route path="/" element={<MainPage posts={posts} dispatch={store.dispatch}/>} ></Route>
           </Routes>
         </nav>
-        
       </div>
     </Router>
   );
