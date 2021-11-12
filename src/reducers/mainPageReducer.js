@@ -6,7 +6,7 @@ const initialState = {
         surname: 'familia',
         id: Date.now()
     },
-    posts: ['Post_1','Post_2','Post_3','Post_4','Post_5']
+    posts: [{text: 'Post_1', date: '22.02.19'}, {text: 'Post_2', date: '22.02.20'}]
 };
 export const mainPageReducer = (state = initialState, action) =>{
     switch (action.type) {

@@ -4,25 +4,24 @@ import addingPost from "../actions/MainPageActions"
 import postAction from "../actions/MainPageActions"
 import { Button, FormControl, IconButton, Input, List, ListItem, ListItemText } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Post } from "./MainPageParts/Post"
-import { NorthWest } from "@mui/icons-material"
+import {Post} from "./MainPageParts/Post"
+import { NorthWest, PinDropSharp } from "@mui/icons-material"
 
 const MainPage = (props) => {
-    const postFromState = useSelector((state) => state.page.posts);
-    console.log(postFromState);
     // const [posts, setPosts] = useState(JSON.parse(localStorage.getItem('initial posts')));
-    const [posts, setPosts] = useState(postFromState);
+    const [posts, setPosts] = useState(useSelector((state) => state.page.posts));
+    console.log(posts);
 
-    useEffect(()=>{
-        localStorage.setItem('initial posts', JSON.stringify(posts));
-    }, [posts])
+    // useEffect(()=>{
+    //     localStorage.setItem('initial posts', JSON.stringify(posts));
+    // }, [posts])
 
     const addPost = (event) => {
         let current=event.currentTarget;
         if(event.key === 'Enter'){
             setPosts([
                 ...posts,
-                current.querySelector('input').value
+                {text: current.querySelector('input').value, date: '1'}
             ],  
             props.dispatch(postAction('ADD_POST', current.querySelector('input').value)),
             current.querySelector('input').value='')
@@ -30,16 +29,17 @@ const MainPage = (props) => {
             if(event.type === "click"){
                 setPosts([
                     ...posts,
-                    current.parentNode.querySelector('input').value
+                    {text: current.parentNode.querySelector('input').value, date: '2'}
                 ],
-                props.dispatch(postAction('ADD_POST', current.querySelector('input').value)),
+                props.dispatch(postAction('ADD_POST', current.parentNode.querySelector('input').value)),
                 current.parentNode.querySelector('input').value='',
             )}
         }
     }
     
         const someNewPosts = posts.map(newPost=> 
-        <Post text = {newPost} delete={postAction} key={Math.random()}></Post>);
+        <Post text = {newPost.text} date={newPost.date} delete={postAction} key={Math.random()}></Post>);
+
     return (
         <div>
             <Input 
@@ -55,19 +55,8 @@ const MainPage = (props) => {
             >Contained</Button>
             <List>
                 {someNewPosts}
-            </List>            
-            {/* <form
-            onSubmit={addPost}
-            onKeyPress={addPost}>
-            <input 
-            type="text"
-            placeholder="Введи-ка сюда свой пост"
-            ></input>
-            <button>Запости чего-нибудь)</button>
-            
-            <ul>
-                {someNewPosts}
-            </ul>
+            </List>       
+            {/*
             <button onClick={()=>dispatch({type:'LOAD_DATA'})}>
                 Click me
             </button> */}

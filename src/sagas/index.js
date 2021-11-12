@@ -1,40 +1,49 @@
 import {take, takeEvery, takeLatest, takeLeading, put, call, fork, spawn} from 'redux-saga/effects' //указывает middleWare ждать выполнения указанного действия - ждёт dispztch'a в приложении
 
-async function getData(pattern){
-    const request = await fetch(`test-api-post.herokuapp.com${pattern}`);
+async function getData(pattern, option){
+    debugger;
+    const request = await fetch(`test-api-post.herokuapp.com${pattern}`, option);
     console.log(request)
     const data = await request.json(); 
     console.log(data)
     return data;
 }
 
-// function* loadPeople(){
-//     const peopleData = yield call(getData, 'people');
-//     yield put({type:'SET_PEOPLE', payload: peopleData.results})
-//     // console.log('load people')
-// }
-// function* loadPlanets(){
-//     const planetsData = yield call(getData, 'planets');
-//     yield put({type:'SET_PLANETS', payload: planetsData.results})
-//     // console.log('load planets')
-// }
-
-function* loadPeople(){
-    const peopleData = yield call(getData, '/user/profile');
-    console.log(peopleData)
-    yield put({type:'SET_PEOPLE', payload: peopleData.data})
-    console.log('load people')
+function* signUp(){
+    const signUpPost = yield call(getData, '/auth/sign_up',  {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json;charset=utf-8'},
+        body: JSON.stringify({
+            email: "email@kik.ru",
+            password: "password", 
+            first_name:"firstName", 
+            last_name: "lastName" })
+    })
+    console.log(signUpPost)
+    yield put({type:'SIGN_UP_POST', payload: signUpPost})
 }
-function* loadPosts(){
-    const postsData = yield call(getData, '/posts/all');
-    console.log(postsData)
-    yield put({type:'SET_PEOPLE', payload: postsData.data})
-    console.log('load posts')
+function* login(){
+    const loginPost = yield call(getData, '/auth/sign_in',  {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json;charset=utf-8'},
+        body: JSON.stringify({
+            email: "email@kik.ru",
+            password: "password", })
+    })
+    console.log(loginPost)
+    yield put({type:'LOGIN_POST', payload: loginPost})
 }
+// function* getProfile(){
+//     let response = yield call(getData, '/user/profile', {
+//         method: 'GET',
+//         headers: {'Content-Type': 'application/json;charset=utf-8'},
+//         })
+//     yield put({type : "LOAD_PROFILE", payload : response.json()});
+// }
 export function* workerSaga(){
     // console.log('начинаем выполнение параллельных действий')
-    yield fork(loadPeople);
-    yield fork(loadPosts);
+        yield call(signUp)
+        yield call(login)
     // console.log('Заканчиваем выполнение параллельных действий')
 }
 
@@ -42,7 +51,6 @@ export function* watchClickSaga(){
     yield takeEvery('LOAD_DATA', workerSaga)
 }
 export default function* rootSaga(){
-    // yield console.log("saga")
     yield watchClickSaga();
 }
 

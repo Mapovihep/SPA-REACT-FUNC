@@ -1,26 +1,52 @@
-import { Button, FormControl, TextField } from '@mui/material';
-import { flexbox } from '@mui/system';
-import React from 'react'
+import { Button, TextField } from '@mui/material';
+import React, { useState } from 'react'
+import ProfilePage from './ProfilePage';
 
-const LoginPage = () => {
+const LoginPage = props => {
+    const [info, setInfo] = useState({ login: '', password: ''})
+
+    const handleChange = (e) => {
+        const field = e.currentTarget;
+        const type = field.id;
+        type === 'Login' ? 
+        setInfo({...info, login: field.value}) 
+        : setInfo({...info, password: field.value})
+        }
+    async function getData(pattern){
+        // const request = await fetch('https://test-api-post.herokuapp.com/auth/sign_up', {
+        //     method: 'POST',
+        //     headers: {'Content-Type': 'application/json;charset=utf-8'},
+        //     body: JSON.stringify({
+        //         email: "email@kiku.ru",
+        //         password: "data.data.password", 
+        //         first_name:"data.data.firstName", 
+        //         last_name: "data.data.lastName" 
+        //     })
+        // })
+        // console.log(request)
+        // const data = await request.json(); 
+        // console.log(data)
+        props.dispatch({type:'LOAD_DATA'})
+    }
     return(
         <div style={{display: "flex", flexDirection: "column", alignItems: "center", margin: "20px"}}>
-                
                 <TextField
-                    id="outlined-name"
+                    id="Login"
                     label="Login"
                     style={{margin: "10px 0"}}
-                    // onChange={handleChange}
+                    onChange={handleChange}
                 />
                 <TextField
-                    id="outlined-name"
+                    id="Password"
                     label="Password"
                     style={{margin: "10px 0"}}
-                    // onChange={handleChange}
+                    onChange={handleChange}
+                    type='password'
                 />
-                <Button>
+                <Button onClick={getData}>
                     Log In
                 </Button>
+            <ProfilePage dispatch={props.dispatch}/>     
         </div> 
     )
 }
