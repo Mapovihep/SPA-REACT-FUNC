@@ -3,30 +3,21 @@ import React, { useState } from 'react'
 import ProfilePage from './ProfilePage';
 
 const LoginPage = props => {
-    const [info, setInfo] = useState({ login: '', password: ''})
+    const [loginPageInfo, setInfo] = useState({ login: '', password: ''})
 
     const handleChange = (e) => {
         const field = e.currentTarget;
         const type = field.id;
         type === 'Login' ? 
-        setInfo({...info, login: field.value}) 
-        : setInfo({...info, password: field.value})
+        setInfo({...loginPageInfo, login: field.value}) 
+        : setInfo({...loginPageInfo, password: field.value})
         }
     async function getData(pattern){
-        // const request = await fetch('https://test-api-post.herokuapp.com/auth/sign_up', {
-        //     method: 'POST',
-        //     headers: {'Content-Type': 'application/json;charset=utf-8'},
-        //     body: JSON.stringify({
-        //         email: "email@kiku.ru",
-        //         password: "data.data.password", 
-        //         first_name:"data.data.firstName", 
-        //         last_name: "data.data.lastName" 
-        //     })
-        // })
-        // console.log(request)
-        // const data = await request.json(); 
-        // console.log(data)
         props.dispatch({type:'LOAD_DATA'})
+        
+    }
+    const dispatchFromThis = () => {
+        props.dispatch({type:'SIGN_UP', state: loginPageInfo})
     }
     return(
         <div style={{display: "flex", flexDirection: "column", alignItems: "center", margin: "20px"}}>
@@ -46,7 +37,10 @@ const LoginPage = props => {
                 <Button onClick={getData}>
                     Log In
                 </Button>
-            <ProfilePage dispatch={props.dispatch}/>     
+                <Button onClick={dispatchFromThis}>
+                    changing localState
+                </Button>
+            <ProfilePage />     
         </div> 
     )
 }

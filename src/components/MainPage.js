@@ -8,8 +8,8 @@ import {Post} from "./MainPageParts/Post"
 import { NorthWest, PinDropSharp } from "@mui/icons-material"
 
 const MainPage = (props) => {
-    // const [posts, setPosts] = useState(JSON.parse(localStorage.getItem('initial posts')));
-    const [posts, setPosts] = useState(useSelector((state) => state.page.posts));
+    console.log(props);
+    const [posts, setPosts] = useState(useSelector((props) => props.page.posts));
     console.log(posts);
 
     // useEffect(()=>{

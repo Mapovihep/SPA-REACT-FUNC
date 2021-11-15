@@ -2,33 +2,41 @@ const SET_PEOPLE = 'SET_PEOPLE'
 const SET_POSTS = 'SET_POSTS'
 const LOGIN_POST = 'LOGIN_POST'
 const LOAD_PROFILE = 'LOAD_PROFILE'
+const LOAD_POSTS = 'LOAD_POSTS'
+const SIGN_UP = 'SIGN_UP'
 const initialState = {
     people: [],
     posts: [],
-    request: {}
+    request: {},
+    response: [],
+    loggedIn: false
 }
 export const sagaReducer = (state = initialState, action) =>{
        switch (action.type) {
             //FROM SAGA
-        case SET_PEOPLE: 
-            return { ...state,
-                    people: [...state.people,
-                    ...action.payload]
+        case SIGN_UP:
+            return {
+                ...state,
+                  loggedIn: action.payload
+                } 
+        case LOAD_POSTS: 
+            return {
+                ...state, 
+                posts: action.payload
             }
-        case SET_POSTS: 
-            return { ...state,
-                    planets: [...state.posts,
-                    ...action.payload]
-            }
-        case LOGIN_POST: 
-        return { ...state,
-                planets: [...state.posts,
-                ...action.payload]
-        }
-        case LOAD_PROFILE: 
-        return { ...state,
-                response: action.payload
-        }
+        // case LOGIN_POST: 
+        // return { ...state,
+        //         planets: [...state.posts,
+        //         ...action.payload]
+        // }
+        // case LOAD_PROFILE: 
+        // return { ...state,
+        //         response: action.payload
+        // }
+        // case LOAD_POSTS: 
+        // return { ...state,
+        //         response: action.payload
+        // }
             //FROM SAGA
         default:
             return state

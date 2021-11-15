@@ -20,7 +20,7 @@ const ProfilePage = props => {
         console.log(data)
     }
     async function handleClickLogin(){
-        let request = await fetch('https://test-api-post.herokuapp.com/auth/sign_in', {
+        let response = await fetch('https://test-api-post.herokuapp.com/auth/sign_in', {
             method: 'POST',
             headers: {'Content-Type': 'application/json;charset=utf-8'},
             body: JSON.stringify({
@@ -28,11 +28,11 @@ const ProfilePage = props => {
                 password: "password", 
             })
         })
-        console.log(request);
-        let data = await request.json(); 
-        console.log(data);
-        let token = data.headers.get('Authorization')
+        let token = response.headers.get('Authorization')
         console.log(token);
+        console.log(response);
+        let data = await response.json(); 
+        console.log(data);
     }
     async function handleClickGetPosts(){
         let request = await fetch('https://test-api-post.herokuapp.com/posts/all', {

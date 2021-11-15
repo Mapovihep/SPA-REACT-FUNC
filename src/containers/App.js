@@ -15,6 +15,7 @@ import SignUpPage from "../components/SignUpPage";
 import store from "../store";
 
 const App = props => {
+  console.log(store.getState())
   const [posts, setPostsToState] = useState(props.store)
   return (
     <Router>
@@ -34,7 +35,7 @@ const App = props => {
             {/* <Route path="/profilePage" element={<ProfilePage />} ></Route> */}
             <Route path="/loginPage" element={<LoginPage dispatch={store.dispatch}/>} ></Route>
             <Route path="/signUpPage" element={<SignUpPage />} ></Route>
-            <Route path="/" element={<MainPage  dispatch={store.dispatch}/>} ></Route>
+            <Route path="/" element={<MainPage  dispatch={store.dispatch} posts={posts}/>} ></Route>
           </Routes>
         </nav>
       </div>
