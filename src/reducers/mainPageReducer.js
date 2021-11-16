@@ -6,7 +6,7 @@ const initialState = {
         surname: 'familia',
         id: Date.now()
     },
-    posts: [{text: 'Post_1', date: '22.02.19'}, {text: 'Post_2', date: '22.02.20'}]
+    posts: [{text: 'Post_1', date: '22.02.19', comments: []}, {text: 'Post_2', date: '22.02.20', comments: []}]
 };
 export const mainPageReducer = (state = initialState, action) =>{
     switch (action.type) {
@@ -15,18 +15,7 @@ export const mainPageReducer = (state = initialState, action) =>{
                 ...state.posts,
                 addedPost: action.payload,
             };
-        case DEL_POST:
-            let neededEl = 0;
-            for(let el of state.posts){
-                if(el===action.payload){
-                    neededEl = el;
-                    console.log(neededEl); 
-                }
-            }
-            return{
-                ...state,
-                deletedPost: action.payload,
-            };
+        
         default:
             return state;
     }

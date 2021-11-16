@@ -1,59 +1,59 @@
 import { useDispatch, useSelector } from "react-redux"
 import React, {useState, useEffect, getState} from 'react'
-import addingPost from "../actions/MainPageActions"
+import addingPost, { addPost } from "../actions/MainPageActions"
 import postAction from "../actions/MainPageActions"
 import { Button, FormControl, IconButton, Input, List, ListItem, ListItemText } from "@mui/material"
-import DeleteIcon from '@mui/icons-material/Delete';
 import {Post} from "./MainPageParts/Post"
-import { NorthWest, PinDropSharp } from "@mui/icons-material"
 
 const MainPage = (props) => {
     console.log(props);
-    const [posts, setPosts] = useState(useSelector((props) => props.page.posts));
-    console.log(posts);
-
-    // useEffect(()=>{
-    //     localStorage.setItem('initial posts', JSON.stringify(posts));
-    // }, [posts])
-
-    const addPost = (event) => {
-        let current=event.currentTarget;
-        if(event.key === 'Enter'){
-            setPosts([
-                ...posts,
-                {text: current.querySelector('input').value, date: '1'}
-            ],  
-            props.dispatch(postAction('ADD_POST', current.querySelector('input').value)),
-            current.querySelector('input').value='')
-        }else{
-            if(event.type === "click"){
-                setPosts([
-                    ...posts,
-                    {text: current.parentNode.querySelector('input').value, date: '2'}
-                ],
-                props.dispatch(postAction('ADD_POST', current.parentNode.querySelector('input').value)),
-                current.parentNode.querySelector('input').value='',
-            )}
-        }
-    }
+    const [posts, setPosts] = useState(props.posts);
+    const dispatch = useDispatch();
     
-        const someNewPosts = posts.map(newPost=> 
-        <Post text = {newPost.text} date={newPost.date} delete={postAction} key={Math.random()}></Post>);
-
+    
+    useEffect(()=>{
+        console.log('страница обновляется')
+     },
+    [posts])
+    const someNewPosts = posts.map(newPost=> 
+    <Post 
+    header = {newPost.text||newPost.title}
+    user_id = {newPost.user_id}
+    description = {newPost.description} 
+    date={newPost.date||newPost.updatedAt.substr(0, 10)} 
+    key={newPost.id}
+    id={newPost.id}
+    comments={newPost.comments.length}></Post>);
+    /*comments: (3) [{…}, {…}, {…}]
+    createdAt: "2021-06-10T14:38:27.392Z"
+    description: "first post"
+    id: 1
+    title: "first post"
+    updatedAt: "2021-06-10T14:38:27.392Z"
+    user_id: 5 */
     return (
         <div>
-            <Input 
-                onChange={addPost}
-                onKeyPress={addPost}            
-                type="text"
-                placeholder="Введи-ка сюда свой пост"
-                style={{margin: "20px", width: "75%"}}
-            ></Input>
-            <Button
-                onClick={addPost}
-                variant="contained"
-            >Contained</Button>
-            <List>
+            <div style={{margin: "20px", width: "95%"}}>
+                <Input 
+                    onChange={addPost}
+                    onKeyPress={addPost}            
+                    type="text"
+                    placeholder="Введи-ка заголовок будущего поста"
+                    style={{margin: "20px", width: "70%"}}
+                ></Input>
+                <Button
+                    onClick={addPost}
+                    variant="contained"
+                >Contained</Button>
+            </div>
+            <span 
+            style={{display: "inline-block",
+            width:"100px", fontSize: "30px",
+            paddingLeft: "30px"
+            }}>{posts.length}</span>
+            <List style={{display: "flex", 
+            flexWrap: "wrap",
+            alignItems: "center"}}>
                 {someNewPosts}
             </List>       
             {/*

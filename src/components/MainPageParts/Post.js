@@ -3,11 +3,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from "react";
 import { Box } from "@mui/system";
+import postAction from "../../actions/MainPageActions";
+import { useDispatch } from "react-redux";
 export const Post = props => {
     const [state, setPostState] = useState({...props,  likeCount: 5});
+    const dispatch = useDispatch();
     const deletePost = (e) =>{
-        // console.log(e.currentTarget.parentNode.querySelector('span').textContent)
-        props.delete('DELETE_POST', e.currentTarget.parentNode.querySelector('span').textContent)
+        dispatch({type: 'DELETE_POST', payload: state.id});
     }
     const handleClick = () => {
         let current = state.likeCount;
@@ -17,23 +19,27 @@ export const Post = props => {
                  likeCount: current}
         })
     }
+    
     return(
-        <ListItem key={Math.random()}>            
+        <ListItem style={{width:"300px", height: "100%"}}>            
             <Box>
-                <Card sx={{ minWidth: 275 }}>
+                <Card sx={{ minWidth: 275, maxWidth: 500}} style={{height: "100%"}}>
                     <CardContent>
-                        <Typography variant="h5" component="div">
-                            {}
+                        <span>
+                            {state.key}
+                        </span>
+                        <Typography variant="h6" component="div">
+                            {state.header + ' user:' + (state.user_id||' your_post')}
                         </Typography>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {state.text}
+                            {state.description}
                         </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                             {state.date}
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button>Add Comment</Button>
+                        <Button>Add comment ({props.comments})</Button>
                         <IconButton aria-label="delete" onClick={deletePost}>
                             <DeleteIcon />
                         </IconButton>

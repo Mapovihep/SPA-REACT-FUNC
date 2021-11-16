@@ -1,45 +1,68 @@
 import { Mail } from '@mui/icons-material';
 import { Button, TextField } from '@mui/material';
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 
 const SignUpPage = () => {
-    const [info, setInfo] = useState({ eMail: '', login: '', password: ''})
+    const [info, setInfo] = useState({ eMail: '', password: '', firstName: '', lastName: '', errorText: ''})
+    const dispatch = useDispatch();
 
-    
+    let errorText ='';
     const handleChange = (e) => {
         const field = e.currentTarget;
         const type = field.id;
         type === 'E-Mail' ? 
         setInfo({...info, eMail: field.value}) 
-        : (type === "Login" ? 
-        setInfo({...info, login: field.value})
-        : setInfo({...info, password: field.value}))
+        : (type === "Password" ? 
+        setInfo({...info, password: field.value})
+        : (type === "FirstName" ? setInfo({...info, firstName: field.value}) 
+        : setInfo({...info, lastName: field.value})))
+    }
+   
+    const changingSagaDays = e => {
+        if(info.eMail!==""&&info.password!==""&&info.lastName!==""&&info.firstName!==""){
+            console.log("диспатчим, господа")
+        dispatch({type: 'SIGN_UP', state: info})
+        }else{
+            console.log("не диспатчим, господа")
+            setInfo({...info, errorText: "Введите-ка, сударь, все данные"})
         }
-    
+        const textFields = e.currentTarget.parentNode.querySelectorAll('input');
+        for(let t of textFields){
+            t.value=''
+        }
+    }
     return(
         <div style={{display: "flex", flexDirection: "column", alignItems: "center", margin: "20px"}}>
                 <TextField
                     id="E-Mail"
-                    label="E-Mail"
-                    onChange={handleChange}
-                    style={{margin: "10px 0"}}
-                />
-                <TextField
-                    id="Login"
-                    label="Login"
+                    placeholder="E-Mail"
                     onChange={handleChange}
                     style={{margin: "10px 0"}}
                 />
                 <TextField
                     id="Password"
-                    label="Password"
+                    placeholder="Password"
                     style={{margin: "10px 0"}}
                     onChange={handleChange}
                     type='password'
                 />
-                <Button>
-                    Sign Up
+                <TextField
+                    id="FirstName"
+                    placeholder="FirstName"
+                    onChange={handleChange}
+                    style={{margin: "10px 0"}}
+                />
+                <TextField
+                    id="LastName"
+                    placeholder="LastName"
+                    onChange={handleChange}
+                    style={{margin: "10px 0"}}
+                />
+                <Button onClick={changingSagaDays}>
+                    Changing localState
                 </Button>
+                <span>{info.errorText}</span>
         </div>
     )
 }
