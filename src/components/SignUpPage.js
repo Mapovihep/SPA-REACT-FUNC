@@ -19,7 +19,7 @@ const SignUpPage = () => {
         : setInfo({...info, lastName: field.value})))
     }
    
-    const changingSagaDays = e => {
+    const signUpDisp = e => {
         if(info.eMail!==""&&info.password!==""&&info.lastName!==""&&info.firstName!==""){
             console.log("диспатчим, господа")
         dispatch({type: 'SIGN_UP', state: info})
@@ -59,8 +59,8 @@ const SignUpPage = () => {
                     onChange={handleChange}
                     style={{margin: "10px 0"}}
                 />
-                <Button onClick={changingSagaDays}>
-                    Changing localState
+                <Button onClick={signUpDisp}>
+                    Sign Up
                 </Button>
                 <span>{info.errorText}</span>
         </div>

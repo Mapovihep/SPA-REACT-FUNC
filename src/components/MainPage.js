@@ -6,31 +6,21 @@ import { Button, FormControl, IconButton, Input, List, ListItem, ListItemText } 
 import {Post} from "./MainPageParts/Post"
 
 const MainPage = (props) => {
-    console.log(props);
-    const [posts, setPosts] = useState(props.posts);
+    const [posts, setPosts] = useState(props.posts||[]);
     const dispatch = useDispatch();
     
-    
-    useEffect(()=>{
-        console.log('страница обновляется')
-     },
-    [posts])
     const someNewPosts = posts.map(newPost=> 
-    <Post 
-    header = {newPost.text||newPost.title}
-    user_id = {newPost.user_id}
-    description = {newPost.description} 
-    date={newPost.date||newPost.updatedAt.substr(0, 10)} 
-    key={newPost.id}
-    id={newPost.id}
-    comments={newPost.comments.length}></Post>);
-    /*comments: (3) [{…}, {…}, {…}]
-    createdAt: "2021-06-10T14:38:27.392Z"
-    description: "first post"
-    id: 1
-    title: "first post"
-    updatedAt: "2021-06-10T14:38:27.392Z"
-    user_id: 5 */
+        <Post 
+        header = {newPost.text||newPost.title}
+        user_id = {newPost.user_id}
+        description = {newPost.description} 
+        date={newPost.date||newPost.updatedAt.substr(0, 10)} 
+        key={newPost.id}
+        id={newPost.id}
+        comments={newPost.comments.length}></Post>);
+        const handler = () =>{
+            dispatch({type: 'LOAD_POSTS'})
+        }
     return (
         <div>
             <div style={{margin: "20px", width: "95%"}}>
@@ -42,7 +32,7 @@ const MainPage = (props) => {
                     style={{margin: "20px", width: "70%"}}
                 ></Input>
                 <Button
-                    onClick={addPost}
+                    onClick={handler}
                     variant="contained"
                 >Contained</Button>
             </div>
@@ -56,14 +46,8 @@ const MainPage = (props) => {
             alignItems: "center"}}>
                 {someNewPosts}
             </List>       
-            {/*
-            <button onClick={()=>dispatch({type:'LOAD_DATA'})}>
-                Click me
-            </button> */}
         </div>
     );
 }
-//</div><button onClick={()=>dispatch({type:'LOAD_DATA'})>Подгрузить данные</button></button>
-//
 
 export default MainPage;

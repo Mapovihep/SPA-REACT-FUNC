@@ -1,3 +1,5 @@
+import { ADD_POST } from "../actions/MainPageActions"
+
 const SET_PEOPLE = 'SET_PEOPLE'
 const SET_POSTS = 'SET_POSTS'
 const LOGIN_POST = 'LOGIN_POST'
@@ -7,12 +9,9 @@ const SIGN_UP_POST = 'SIGN_UP_POST'
 const DEL_POST = 'DEL_POST'
 
 const initialState = {
-    people: [],
     posts: [],
-    request: {},
-    response: [],
-    loggedIn: false,
-    signedUp: false
+    userProfile: [],
+    loggedIn: false
 }
 export const sagaReducer = (state = initialState, action) =>{
        switch (action.type) {
@@ -34,22 +33,21 @@ export const sagaReducer = (state = initialState, action) =>{
                 } 
         case DEL_POST:
             let mass = state.posts.filter(el => el.id !== action.payload)
+            console.log(mass);
             state.posts = mass
+            console.log(state.posts)
+            console.log(state)
             return state
-        // case LOGIN_POST: 
-        // return { ...state,
-        //         planets: [...state.posts,
-        //         ...action.payload]
-        // }
-        // case LOAD_PROFILE: 
-        // return { ...state,
-        //         response: action.payload
-        // }
-        // case LOAD_POSTS: 
-        // return { ...state,
-        //         response: action.payload
-        // }
-            //FROM SAGA
+        case LOAD_PROFILE:
+            console.log(state)
+            console.log(action.payload)
+            return {
+                ...state,
+                    userProfile: action.payload
+                }
+        case ADD_POST:
+            state.posts.push(action.payload)
+            return state
         default:
             return state
        }

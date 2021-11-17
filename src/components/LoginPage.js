@@ -2,10 +2,11 @@ import { Button, TextField } from '@mui/material';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import ProfilePage from './ProfilePage';
-
+import { Link } from "react-router-dom";
 const LoginPage = props => {
     const [loginPageInfo, setInfo] = useState({ eMail: '12@mail.ru', password: '1', errorText: ''})
     const dispatch = useDispatch();
+
     const handleChange = (e) => {
         const field = e.currentTarget;
         const type = field.id;
@@ -13,10 +14,6 @@ const LoginPage = props => {
         setInfo({...loginPageInfo, eMail: field.value}) 
         : setInfo({...loginPageInfo, password: field.value})
         }
-    async function getData(pattern){
-        props.dispatch({type:'LOAD_DATA', state: loginPageInfo})
-        
-    }
     const originalLogIn = e => {
         if(loginPageInfo.eMail!==""&&loginPageInfo.password!==""){
             console.log("диспатчим, господа")
@@ -29,8 +26,8 @@ const LoginPage = props => {
         for(let t of textFields){
             t.value=''
         }
-        
     }
+    
     return(
         <div style={{display: "flex", flexDirection: "column", alignItems: "center", margin: "20px"}}>
                 <TextField
@@ -46,14 +43,12 @@ const LoginPage = props => {
                     onChange={handleChange}
                     type='password'
                 />
-                <Button onClick={getData}>
-                    Log In
-                </Button>
-                <Button onClick={originalLogIn}>
-                    originalLogIn
-                </Button>
+                <Link to="/">
+                    <Button onClick={originalLogIn}>
+                        LogIn
+                    </Button>
+                </Link>
                 <span>{loginPageInfo.errorText}</span>
-            <ProfilePage />     
         </div> 
     )
 }

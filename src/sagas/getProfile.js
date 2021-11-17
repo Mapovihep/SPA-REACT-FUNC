@@ -5,5 +5,5 @@ export default function* getProfile(){
         headers: {'Content-Type': 'application/json;charset=utf-8', 'Authorization': localStorage.getItem('token')},
         }).then(response => response.json())
         console.log(response);
-    yield put({type : "LOAD_PROFILE"});
+    yield put({type : "LOAD_PROFILE", payload: response});
     }

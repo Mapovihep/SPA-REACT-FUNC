@@ -1,4 +1,4 @@
-import {put, call} from 'redux-saga/effects' //указывает middleWare ждать выполнения указанного действия - ждёт dispztch'a в приложении
+import {put} from 'redux-saga/effects' //указывает middleWare ждать выполнения указанного действия - ждёт dispztch'a в приложении
 
 export default function* getPosts (){
     const response = yield fetch( "https://test-api-post.herokuapp.com/posts/all", {
