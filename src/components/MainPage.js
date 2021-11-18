@@ -4,38 +4,25 @@ import addingPost, { addPost } from "../actions/MainPageActions"
 import postAction from "../actions/MainPageActions"
 import { Button, FormControl, IconButton, Input, List, ListItem, ListItemText } from "@mui/material"
 import {Post} from "./MainPageParts/Post"
+import { InputForNewForm } from "./MainPageParts/InputForNewForm"
 
 const MainPage = (props) => {
-    const [posts, setPosts] = useState(props.posts||[]);
     const dispatch = useDispatch();
+    const status = useSelector(state => state.saga.posts)
+    const [posts, setPosts] = useState(status||[]);
+
+    useEffect(()=>{setPosts(status)})
+        // console.log('кеть')})//теперь он рендерится, когда происходит редирект при залогинивании, но без обращения к store не хочет, хотя его состояние меняется
     
-    const someNewPosts = posts.map(newPost=> 
-        <Post 
-        header = {newPost.text||newPost.title}
-        user_id = {newPost.user_id}
-        description = {newPost.description} 
-        date={newPost.date||newPost.updatedAt.substr(0, 10)} 
-        key={newPost.id}
-        id={newPost.id}
-        comments={newPost.comments.length}></Post>);
-        const handler = () =>{
-            dispatch({type: 'LOAD_POSTS'})
-        }
+    const deletePost = (id) => {
+        dispatch({type: 'DELETE_POST', payload: id});
+        setPosts(props.posts||[]);}
+    const redirectOnPost = (id) => {
+        dispatch({type: 'REDIRECT_ON_POST', payload: id});
+    }
     return (
         <div>
-            <div style={{margin: "20px", width: "95%"}}>
-                <Input 
-                    onChange={addPost}
-                    onKeyPress={addPost}            
-                    type="text"
-                    placeholder="Введи-ка заголовок будущего поста"
-                    style={{margin: "20px", width: "70%"}}
-                ></Input>
-                <Button
-                    onClick={handler}
-                    variant="contained"
-                >Contained</Button>
-            </div>
+            <InputForNewForm/>
             <span 
             style={{display: "inline-block",
             width:"100px", fontSize: "30px",
@@ -44,7 +31,13 @@ const MainPage = (props) => {
             <List style={{display: "flex", 
             flexWrap: "wrap",
             alignItems: "center"}}>
-                {someNewPosts}
+                {posts.map(newPost=> 
+                <Post 
+                postInfo={newPost}
+                deletePost={deletePost}
+                redirectOnPost={redirectOnPost}
+                key={Math.random()}>
+                </Post>)}
             </List>       
         </div>
     );

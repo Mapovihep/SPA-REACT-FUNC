@@ -8,57 +8,52 @@ import {
   Link,
   Navigate
 } from "react-router-dom";
-
+import store from '../store/index'
 import LoginPage from "../components/LoginPage";
 import MainPage from "../components/MainPage";
 import ProfilePage from "../components/ProfilePage";
 import SignUpPage from "../components/SignUpPage";
-
+import { logOut } from "../actions/LogOut";
+import { Post } from "../components/MainPageParts/Post";
+// import { redirectOnPost, onPostId, loggedIn, posts } from './selectors'
 const App = props => {
   const dispatch = useDispatch();
-  const logOut = () => {
-      dispatch({type: 'LOG_OUT'})
-  }
-
   const loggedIn = useSelector(state => state.saga.loggedIn);
   const posts = useSelector(state => [...state.page.posts||[], ...state.saga.posts||[]])
-  // const [loggedIn, setLoggedIn] = useState(loggedInSel);
-  // const [posts, setPosts] = useState(postsSel);
-  // let [token, setToken] = useState(localStorage.getItem('token'))
-  // const [prepPosts, setPrepPosts] = useState([{title: 'title', descr:'descr'}]);
-  // console.log(prepPosts);
-  // setPrepPosts([...prepPosts, {title: 'new', descr: 'new'}])
-  // console.log(prepPosts);
-  
-  // useEffect(() => {
-  //   // You need to restrict it at some point
-  //   // This is just dummy code and should be replaced by actual
-  //   if (posts === 0) {
-  //       getPerson();
-  //   }
-  // }, []);
-    return (<Router>
+  let {action, token} = logOut();
+  const logOutLocal = () => {dispatch(action)}
+  const redirectOnPost = useSelector((state => state.saga.redirectOnPost));
+  const onPostId = useSelector((state => state.saga.onPostId));//должно меняться из стора
+  const onPostInfo = useSelector((state=>state.saga.onPostInfo));
+  debugger;
+    return (
+      <Router>
+        {redirectOnPost ? 
+        <Post onPostInfo={onPostInfo}/> :
         <div className="header_container__App">
           <nav>
             <AppBar position="static" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
               <Toolbar>
             <ButtonGroup variant="contained">
               <Link to="/"><Button>Main Page</Button></Link>
-              {localStorage.getItem('token')===null&&<Link to="/loginPage"><Button>Login Page</Button></Link>}
-              {localStorage.getItem('token')===null&&<Link to="/signUpPage"><Button>Sign Up Page</Button></Link>}
-              {localStorage.getItem('token')!==null&&<Link to="/profilePage"><Button>Profile Page</Button></Link>}
-              {localStorage.getItem('token')!==null&&<Button onClick={logOut}>Log Out</Button>}
+              {!loggedIn&&<Link to="/loginPage"><Button>Login Page</Button></Link>}
+              {!loggedIn&&<Link to="/signUpPage"><Button>Sign Up Page</Button></Link>}
+              {loggedIn&&<Link to="/profilePage"><Button>Profile Page</Button></Link>}
+              {loggedIn&&<Link to="/"><Button onClick={logOutLocal}>Log Out</Button></Link>}
+              {/* {redirectOnPost&&<Navigate to={`/posts/:${onPostId}`}/>} */}
             </ButtonGroup>
               </Toolbar>
             </AppBar>
             <Routes>
-              <Route path="/loginPage" element={localStorage.getItem('token')!==null ? <Navigate to="/"/> : <LoginPage/>}></Route>
-              <Route path="/signUpPage" element={localStorage.getItem('token')!==null ? <Navigate to="/"/> : <SignUpPage />} ></Route>
-              <Route path="/profilePage" element={<ProfilePage/>} ></Route>
-              <Route path="/" element={<MainPage posts={posts}/>}></Route>
+              <Route path="/loginPage" element={loggedIn ? <Navigate to="/"/> : <LoginPage/>}></Route>
+              <Route path="/signUpPage" element={loggedIn ? <Navigate to="/"/> : <SignUpPage />} ></Route>
+              <Route path="/profilePage" element={!loggedIn ? <Navigate to="/loginPage"/> : <ProfilePage/>} ></Route>
+              <Route path="/" element={!loggedIn ? <Navigate to="/loginPage"/> : <MainPage posts={posts}/>}></Route>
+              {/* <Route path={`/posts/:${onPostId}`}  element={redirectOnPost&&<Post header=''/>}></Route> */}
+              {redirectOnPost&&<Route path={`/posts/:${onPostId}`} element={<Post onPostInfo={onPostInfo}/>}></Route>}
             </Routes>
           </nav>
-        </div>
+        </div>}
       </Router>)  
 }
 

@@ -16,16 +16,12 @@ const LoginPage = props => {
         }
     const originalLogIn = e => {
         if(loginPageInfo.eMail!==""&&loginPageInfo.password!==""){
-            console.log("диспатчим, господа")
             dispatch({type:'LOG_IN', state: loginPageInfo})
         }else{
-            console.log("не диспатчим, господа")
             setInfo({...loginPageInfo, errorText: "Введите-ка, сударь, все данные"})
         }
         const textFields = e.currentTarget.parentNode.querySelectorAll('input');
-        for(let t of textFields){
-            t.value=''
-        }
+        for(let t of textFields){t.value=''}
     }
     
     return(

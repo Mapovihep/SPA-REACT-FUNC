@@ -6,9 +6,7 @@ const initialState = {
 };
 export const mainPageReducer = (state = initialState, action) =>{
     switch (action.type) {
-        case LOG_OUT:
-            localStorage.clear()
-            return state
+        
         default:
             return state;
     }
