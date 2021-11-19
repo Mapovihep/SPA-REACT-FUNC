@@ -6,7 +6,7 @@ import {
   Routes,
   Route,
   Link,
-  Navigate
+  Navigate,
 } from "react-router-dom";
 import store from '../store/index'
 import LoginPage from "../components/LoginPage";
@@ -25,11 +25,11 @@ const App = props => {
   const redirectOnPost = useSelector((state => state.saga.redirectOnPost));
   const onPostId = useSelector((state => state.saga.onPostId));//должно меняться из стора
   const onPostInfo = useSelector((state=>state.saga.onPostInfo));
-  debugger;
+  console.log(onPostInfo);
+  // debugger;
     return (
       <Router>
-        {redirectOnPost ? 
-        <Post onPostInfo={onPostInfo}/> :
+        {
         <div className="header_container__App">
           <nav>
             <AppBar position="static" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
@@ -47,10 +47,12 @@ const App = props => {
             <Routes>
               <Route path="/loginPage" element={loggedIn ? <Navigate to="/"/> : <LoginPage/>}></Route>
               <Route path="/signUpPage" element={loggedIn ? <Navigate to="/"/> : <SignUpPage />} ></Route>
-              <Route path="/profilePage" element={!loggedIn ? <Navigate to="/loginPage"/> : <ProfilePage/>} ></Route>
+              <Route path="/profilePage" element={!loggedIn ? <Navigate to="/loginPage"/> : <ProfilePage posts={posts}/>} ></Route>
               <Route path="/" element={!loggedIn ? <Navigate to="/loginPage"/> : <MainPage posts={posts}/>}></Route>
-              {/* <Route path={`/posts/:${onPostId}`}  element={redirectOnPost&&<Post header=''/>}></Route> */}
-              {redirectOnPost&&<Route path={`/posts/:${onPostId}`} element={<Post onPostInfo={onPostInfo}/>}></Route>}
+              {/* <Route path={`/posts/:${onPostId}`}  element={redirectOnPost&&<Post header=''/>}>{console.log(onPostId)}</Route> */}
+              {redirectOnPost&&<Route path={`/posts/:${onPostId}`} element={onPostInfo===undefined ? <Navigate to={`/`}/> : <Post onPostInfo={onPostInfo}/>}></Route>}
+              {/* <Post onPostInfo={onPostInfo}>{console.log(onPostInfo)}</Post> */}
+              {/* <Route><Navigate to='/'></Navigate></Route> */}
             </Routes>
           </nav>
         </div>}

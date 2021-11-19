@@ -17,15 +17,19 @@ export function* signUpWorker(data){
 export function* logInWorker(data){
     yield call(logIn, data.state)
     yield call(getPosts)
+    yield call(getProfile)
 }
 export function* deleteWorker(id){
     yield call(deletePost, id)
+    yield call(getPosts)
 }
 export function* getProfileWorker(){
     yield call(getProfile)
 }
-export function* getAddPostWorker(){
-    yield call(addUsersPost)
+export function* getAddPostWorker(data){
+    debugger
+    yield call(addUsersPost, data.payload)
+    yield call(getPosts)
 }
 export function* watchClickSaga(){
     yield takeEvery('LOAD_DATA', workerSaga)
@@ -34,7 +38,6 @@ export function* watchClickSaga(){
     yield takeEvery('DELETE_POST', deleteWorker)
     yield takeEvery('LOAD_USERS_DATA', getProfileWorker)
     yield takeEvery('LOAD_USERS_POST', getAddPostWorker)
-
 }
 export default function* rootSaga(){
     yield watchClickSaga();

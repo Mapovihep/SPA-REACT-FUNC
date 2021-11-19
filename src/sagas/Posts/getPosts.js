@@ -6,7 +6,7 @@ export default function* getPosts (){
         headers: {'Content-Type': 'application/json;charset=utf-8', 'Authorization': localStorage.getItem('token')},
         })
         const posts = yield response.json();
-        console.log(posts)
+        // console.log(posts)
     yield put({type : "LOAD_POSTS", payload: posts});
  }
 

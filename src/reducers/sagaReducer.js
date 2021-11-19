@@ -1,7 +1,4 @@
-import { ADD_POST } from "../actions/MainPageActions"
 
-const SET_PEOPLE = 'SET_PEOPLE'
-const SET_POSTS = 'SET_POSTS'
 const LOGIN_POST = 'LOGIN_POST'
 const LOAD_PROFILE = 'LOAD_PROFILE'
 const LOAD_POSTS = 'LOAD_POSTS'
@@ -10,6 +7,7 @@ const DEL_POST = 'DEL_POST'
 const LOG_OUT = 'LOG_OUT'
 const REDIRECT_ON_POST = 'REDIRECT_ON_POST'
 const ALREADY_REDIRECTED = 'ALREADY_REDIRECTED'
+const ADD_POST = 'ADD_POST'
 const initialState = {
     posts: [],
     userProfile: [],
@@ -20,14 +18,14 @@ const initialState = {
 export const sagaReducer = (state = initialState, action) =>{
        switch (action.type) {
         case ALREADY_REDIRECTED:
-            if(action.payload === state.onPostId){
+            
                 state = {...state, 
                     redirectOnPost: false}
-            }
+            
             return state
         case REDIRECT_ON_POST:
             let post = state.posts.filter(el => el.id === action.payload)
-            console.log(post)
+            // console.log(post)
             return {...state,
                 redirectOnPost: true,
                 onPostId: action.payload,
@@ -41,25 +39,29 @@ export const sagaReducer = (state = initialState, action) =>{
                   signedUp: action.payload
                 } 
         case LOAD_POSTS: 
-            console.log(state)
             let dates = [];
             for(let el of action.payload){
                 dates.push(Math.round(new Date(el.createdAt).getTime()/10000))
-                console.log(dates)
+                // console.log(dates)
             }
-            dates.sort(function(b, a) {
+            dates.sort(function(a, b) {
                 return a - b;
               });
             let sortedMass = [];
+            let count = 0;
             for(let i =0; i<action.payload.length;i++){
                 for(let el of dates){
                     if(el===(Math.round(new Date(action.payload[i].createdAt).getTime()/10000)))
-                    {sortedMass.push(action.payload[i])}
+                    {
+                        // console.log(Math.round(new Date(action.payload[i].createdAt).getTime()/10000))
+                        // console.log(count + ' дата = ' +  action.payload[i].createdAt)
+                        sortedMass.unshift(action.payload[i])
+                        count++;
+                    }
                 }
             }
-            console.log(sortedMass);
             return {...state, 
-                posts: action.payload
+                posts: sortedMass
             }
         case LOGIN_POST:
             return {...state,
@@ -77,8 +79,14 @@ export const sagaReducer = (state = initialState, action) =>{
                     userProfile: action.payload
                 }
         case ADD_POST:
-            state.posts.push(action.payload)
-            return state
+            console.log(action.payload)
+            console.log(state.posts)
+            console.log({...state,
+                posts: [...state.posts,
+                    action.payload]})
+            return {...state,
+                posts: [...state.posts,
+                    action.payload]}
         default:
             return state
        }

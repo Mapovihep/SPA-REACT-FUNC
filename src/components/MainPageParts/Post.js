@@ -1,15 +1,25 @@
-import { Button, Card, CardActions, CardContent, FormControl, IconButton, Input, List, ListItem, ListItemText, Typography } from "@mui/material"
+import { Button, Card, CardActions, CardContent, FormControl, IconButton, Input, List, ListItem, ListItemText, Typography, Form } from "@mui/material"
+import { Link } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState } from "react";
+import React,{ useEffect, useState } from "react";
 import { Box } from "@mui/system";
-import postAction from "../../actions/MainPageActions";
+import { deletePostAction, redirectOnPostAction } from "../../actions/MainPageActions";
 import { useDispatch, useSelector } from "react-redux";
+import { Comments } from "./Comments";
 export const Post = props => {
-    const [state, setPostState] = useState({...props.postInfo, likeCount: 5});
+    const flag = useSelector(state => state.saga.redirectOnPost);
+    const onPostId = useSelector((state=>state.saga.onPostId));    
+    const [state, setPostState] = useState({...props.postInfo, likeCount: 5, formComm: "none"})
+    onPostId&&console.log(props.postInfo)
     const dispatch = useDispatch();
-    const deletePost = () => {props.deletePost(state.id)}
-    const handleClick = () => {
+    
+    console.log(state.comments)
+    const deletePost = () => {
+        dispatch(deletePostAction(state.id))
+    }
+
+    const handleClickLike = () => {
         let current = state.likeCount; 
         current++;
         setPostState(()=>{
@@ -17,46 +27,59 @@ export const Post = props => {
                  likeCount: current}
         })
     }
-    const flag = useSelector(state => state.saga.redirectOnPost)
-    const handlerPostClick = () =>{
-        !flag ? props.redirectOnPost(state.id)  : console.log('выводим экшен о посте, на который редирект' + state.id)
-        debugger;
+    // console.log(flag)
+
+    const handlerPostClick = () => {
+        // !flag ? dispatch(redirectOnPostAction(state.id))  : console.log('выводим экшен о посте, на который редирект ' + state.id)
+        // debugger;
         // dispatch({type: 'ALREADY_REDIRECTED', payload: state.id})
     }
-    console.log(new Date(state.updatedAt).getFullYear())
+    const showComments = () => {
+        setPostState(()=>{
+            return {...state,
+                formComm: 'block'}})
+    }
+    
     return(
-        <ListItem style={{width:"300px", height: "100%"}}>            
-                <Card
-                onClick={handlerPostClick}
-                sx={{ minWidth: 275, maxWidth: 500}}
-                style={{height: "100%"}}>
-                    <CardContent>
-                        <span>{state.key}</span>
-                        <Typography variant="h6">
-                            {state.title + ' user:' + (state.user_id||' your_post')}
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {state.description}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            {new Date(state.updatedAt).getFullYear()+' : ' + 
-                            new Date(state.updatedAt).getMonth() + ' : ' + 
-                            new Date(state.updatedAt).getDay()}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button>Add comment ({state.comments.length})</Button>
-                        <IconButton aria-label="delete" onClick={deletePost}>
-                            <DeleteIcon />
-                        </IconButton>
-                        <IconButton aria-label="delete" onClick={handleClick} >
-                            <FavoriteIcon />
-                        </IconButton>
-                        <Typography color="text.secondary">
-                            {state.likeCount}
-                        </Typography>
-                    </CardActions>
-                </Card>
+        <ListItem onClick={handlerPostClick} style={{width:"300px", height: "100%"}}>    
+                {/* <Link style={{paddingLeft: 13, textDecoration: 'none'}} to={`/post/id:${state.id}`}>       */}
+                    <Card
+                    sx={{ minWidth: 275, maxWidth: 500}}
+                    style={{height: "100%", display: "flex", flexDirection: "column"}}>
+                        <CardContent>
+                            {/* <span>{state.key}</span> */}
+                            <Typography variant="h6">
+                                {state.title + ' user:' + (state.user_id||' your_post')}
+                            </Typography>
+                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                {state.description}
+                            </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                {new Date(state.updatedAt).getDay()+'. ' + 
+                                new Date(state.updatedAt).getMonth() + '. ' + 
+                                new Date(state.updatedAt).getFullYear()}
+                            </Typography>
+                            <Comments props={state.comments}></Comments>
+                        </CardContent>
+                        <CardActions>
+                            <Button onClick={showComments}>Show comments ({state.comments.length})</Button>
+                            {/* <Button style={{padding: "0"}} onClick={showComments}>Add</Button> */}
+                            <IconButton aria-label="delete" onClick={deletePost}>
+                                <DeleteIcon />
+                            </IconButton>
+                            <IconButton aria-label="delete" onClick={handleClickLike} >
+                                <FavoriteIcon />
+                            </IconButton>
+                            <Typography color="text.secondary">
+                                {state.likeCount}
+                            </Typography>
+                        </CardActions>
+                        <form style={{ display: state.formComm, width: "100%", textAlign: "center" }}>
+                            <Input>Введите свой комментарий</Input>
+                            <Button>Подтвердить ввод</Button>
+                        </form>
+                    </Card>
+                {/* </Link> */}
         </ListItem>
     )
 }
