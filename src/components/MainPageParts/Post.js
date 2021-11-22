@@ -14,7 +14,6 @@ export const Post = props => {
     onPostId&&console.log(props.postInfo)
     const dispatch = useDispatch();
     
-    console.log(state.comments)
     const deletePost = () => {
         dispatch(deletePostAction(state.id))
     }
@@ -35,9 +34,13 @@ export const Post = props => {
         // dispatch({type: 'ALREADY_REDIRECTED', payload: state.id})
     }
     const showComments = () => {
+        if(state.formComm !== 'block'){
         setPostState(()=>{
-            return {...state,
-                formComm: 'block'}})
+            return {...state, formComm: 'block'}
+        })
+        }else{setPostState(()=>{
+            return {...state, formComm: 'none'}
+        })}
     }
     
     return(
@@ -55,11 +58,11 @@ export const Post = props => {
                                 {state.description}
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                {new Date(state.updatedAt).getDay()+'. ' + 
-                                new Date(state.updatedAt).getMonth() + '. ' + 
+                                updated at
+                                {' '+new Date(state.updatedAt).getDate()+'. ' + 
+                                (new Date(state.updatedAt).getMonth()+1) + '. ' + 
                                 new Date(state.updatedAt).getFullYear()}
                             </Typography>
-                            <Comments props={state.comments}></Comments>
                         </CardContent>
                         <CardActions>
                             <Button onClick={showComments}>Show comments ({state.comments.length})</Button>
@@ -74,10 +77,7 @@ export const Post = props => {
                                 {state.likeCount}
                             </Typography>
                         </CardActions>
-                        <form style={{ display: state.formComm, width: "100%", textAlign: "center" }}>
-                            <Input>Введите свой комментарий</Input>
-                            <Button>Подтвердить ввод</Button>
-                        </form>
+                        <Comments display= {state.formComm} comments={state.comments} postId={state.id}></Comments>
                     </Card>
                 {/* </Link> */}
         </ListItem>
