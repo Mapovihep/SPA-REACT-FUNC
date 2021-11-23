@@ -1,4 +1,3 @@
-import { useDispatch } from 'react'
 export const LOAD_USERS_POST = 'LOAD_USERS_POST';
 export const DEL_POST = 'DEL_POST';
 export const DELETE_POST = 'DELETE_POST';
@@ -12,15 +11,3 @@ export const deletePostAction = (id) => {
 export const redirectOnPostAction = (id) => {
     return {type: REDIRECT_ON_POST, payload: id}
 }
-
-const postAction = (type, value) =>{
-        // if(type===ADD_POST){
-        //     console.log('LIKE_ACTION')
-        //     return{type: ADD_POST,
-        //         payload: value}
-        // }else{
-        //     return {type: DEL_POST,
-        //         payload: value}
-        // }
-}
-export default postAction

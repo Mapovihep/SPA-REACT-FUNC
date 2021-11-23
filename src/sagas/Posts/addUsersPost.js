@@ -1,4 +1,4 @@
-import {put} from 'redux-saga/effects' //указывает middleWare ждать выполнения указанного действия - ждёт dispztch'a в приложении
+import {put} from 'redux-saga/effects' 
 
 export default function* addUsersPost (post) {
     console.log(post)
@@ -9,5 +9,4 @@ export default function* addUsersPost (post) {
             description: post.description})
         })
         const addResponse = yield response.json();
-        // console.log(addResponse)
  }

@@ -1,6 +1,6 @@
-import { AppBar, Typography, Toolbar, Button, ButtonGroup  } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { AppBar, Toolbar, Button, ButtonGroup  } from "@mui/material";
+import React from "react";
+import {  useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Routes,
@@ -8,14 +8,13 @@ import {
   Link,
   Navigate,
 } from "react-router-dom";
-import store from '../store/index'
-import LoginPage from "../components/LoginPage";
-import MainPage from "../components/MainPage";
-import ProfilePage from "../components/ProfilePage";
-import SignUpPage from "../components/SignUpPage";
+import LoginPage from "../components/LoginPage/LoginPage";
+import MainPage from "../components/MainPage/MainPage";
+import ProfilePage from "../components/ProfilePage/ProfilePage";
+import SignUpPage from "../components/SignUpPage/SignUpPage";
 import { logOut } from "../actions/LogOut";
 import { Post } from "../components/MainPageParts/Post";
-// import { redirectOnPost, onPostId, loggedIn, posts } from './selectors'
+
 const App = props => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.saga.loggedIn);
@@ -26,7 +25,6 @@ const App = props => {
   const onPostId = useSelector((state => state.saga.onPostId));//должно меняться из стора
   const onPostInfo = useSelector((state=>state.saga.onPostInfo));
   console.log(onPostInfo);
-  // debugger;
     return (
       <Router>
         {

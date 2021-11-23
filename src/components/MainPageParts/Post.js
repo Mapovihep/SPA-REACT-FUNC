@@ -1,12 +1,18 @@
-import { Button, Card, CardActions, CardContent, FormControl, IconButton, Input, List, ListItem, ListItemText, Typography, Form } from "@mui/material"
+import { Button, 
+        Card, 
+        CardActions, 
+        CardContent, 
+        IconButton, 
+        ListItem, 
+        Typography} from "@mui/material"
 import { Link } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import React,{ useEffect, useState } from "react";
-import { Box } from "@mui/system";
 import { deletePostAction, redirectOnPostAction } from "../../actions/MainPageActions";
 import { useDispatch, useSelector } from "react-redux";
 import { Comments } from "./Comments";
+import Moment from "react-moment";
 export const Post = props => {
     const flag = useSelector(state => state.saga.redirectOnPost);
     const onPostId = useSelector((state=>state.saga.onPostId));    
@@ -57,12 +63,10 @@ export const Post = props => {
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                 {state.description}
                             </Typography>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                updated at
-                                {' '+new Date(state.updatedAt).getDate()+'. ' + 
-                                (new Date(state.updatedAt).getMonth()+1) + '. ' + 
-                                new Date(state.updatedAt).getFullYear()}
-                            </Typography>
+                            {"updated at "} 
+                            <Moment style={{ marginBottom: "10px" }} format="YYYY.MM.DD">
+                                {state.updatedAt}
+                            </Moment>
                         </CardContent>
                         <CardActions>
                             <Button onClick={showComments}>Show comments ({state.comments.length})</Button>

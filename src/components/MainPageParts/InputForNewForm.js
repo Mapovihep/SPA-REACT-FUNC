@@ -1,4 +1,4 @@
-import { Button, FormControl, IconButton, Input, List, ListItem, ListItemText } from "@mui/material"
+import { Button, Input } from "@mui/material"
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { inputAction } from "../../actions/MainPageActions"
@@ -22,7 +22,7 @@ export const InputForNewForm = () => {
     const setState = (e) => {
         let postTitle = '';
         e.preventDefault()
-        e.type==="change"&&(postTitle = e.currentTarget.value)
+        e.type==="change"&&(postTitle = e.target.value)
         setInputText({...inputInfo, title: postTitle, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()})
     }
     const addPostTitle = e => {
