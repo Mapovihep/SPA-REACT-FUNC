@@ -9,90 +9,75 @@ import { Link } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import React,{ useEffect, useState } from "react";
-import { deletePostAction, redirectOnPostAction } from "../../actions/MainPageActions";
+import { deletePostAction } from "../../actions/MainPageActions";
 import { useDispatch, useSelector } from "react-redux";
 import { Comments } from "./Comments";
 import Moment from "react-moment";
+import { useNavigate } from "react-router";
 export const Post = props => {
-    const flag = useSelector(state => state.saga.redirectOnPost);
-    const onPostId = useSelector((state=>state.saga.onPostId));    
-    const [state, setPostState] = useState({...props.postInfo, likeCount: 5, formComm: "none"})
-    onPostId&&console.log(props.postInfo)
+    const [state, setPostState] = useState({...props.postInfo, likeCount: 5, formComm: "none", editMode: false, editStyle: 'none'})  
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const userId = useSelector(state => (state.saga.userProfile.id))
+    useEffect(()=>{
+        setPostState({...props.postInfo, likeCount: 5, formComm: "none"});
+        props.fromRouter!==undefined&&setPostState(prevState => ({...prevState, editStyle: 'block'}))
+        console.log(props.fromRouter)
+    },[props, props.fromRouter])
+    const editMode = () => {
+        setPostState(prevState => ({...prevState, editMode: true}))
+    }
     
     const deletePost = () => {
+        userId===state.user_id&&window.confirm('Are you sure?') ? 
         dispatch(deletePostAction(state.id))
+        : window.alert('You are not the author of this post');
     }
-
     const handleClickLike = () => {
-        let current = state.likeCount; 
-        current++;
-        setPostState(()=>{
-            return {...state,
-                 likeCount: current}
-        })
-    }
-    // console.log(flag)
-
-    const handlerPostClick = () => {
-        // !flag ? dispatch(redirectOnPostAction(state.id))  : console.log('выводим экшен о посте, на который редирект ' + state.id)
-        // debugger;
-        // dispatch({type: 'ALREADY_REDIRECTED', payload: state.id})
+        setPostState(prevState => ({...prevState, likeCount: prevState.likeCount+1}))
     }
     const showComments = () => {
-        if(state.formComm !== 'block'){
-        setPostState(()=>{
-            return {...state, formComm: 'block'}
-        })
-        }else{setPostState(()=>{
-            return {...state, formComm: 'none'}
-        })}
+        state.formComm !== 'block' ? 
+        setPostState(state => ({...state, formComm: 'block'}))
+        : setPostState(state => ({...state, formComm: 'none'}))
     }
-    
+    const handlerRoute = () => {
+        navigate(`/posts/${state.id}`)}
     return(
-        <ListItem onClick={handlerPostClick} style={{width:"300px", height: "100%"}}>    
-                {/* <Link style={{paddingLeft: 13, textDecoration: 'none'}} to={`/post/id:${state.id}`}>       */}
-                    <Card
-                    sx={{ minWidth: 275, maxWidth: 500}}
-                    style={{height: "100%", display: "flex", flexDirection: "column"}}>
-                        <CardContent>
-                            {/* <span>{state.key}</span> */}
-                            <Typography variant="h6">
-                                {state.title + ' user:' + (state.user_id||' your_post')}
-                            </Typography>
-                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                {state.description}
-                            </Typography>
-                            {"updated at "} 
-                            <Moment style={{ marginBottom: "10px" }} format="YYYY.MM.DD">
-                                {state.updatedAt}
-                            </Moment>
-                        </CardContent>
-                        <CardActions>
-                            <Button onClick={showComments}>Show comments ({state.comments.length})</Button>
-                            {/* <Button style={{padding: "0"}} onClick={showComments}>Add</Button> */}
-                            <IconButton aria-label="delete" onClick={deletePost}>
-                                <DeleteIcon />
-                            </IconButton>
-                            <IconButton aria-label="delete" onClick={handleClickLike} >
-                                <FavoriteIcon />
-                            </IconButton>
-                            <Typography color="text.secondary">
-                                {state.likeCount}
-                            </Typography>
-                        </CardActions>
-                        <Comments display= {state.formComm} comments={state.comments} postId={state.id}></Comments>
-                    </Card>
-                {/* </Link> */}
+        <ListItem>    
+            <Card style={{height: "100%", width: "90vw", display: "flex", flexDirection: "column"}}>      
+                    <CardContent>
+                        <Typography onClick={handlerRoute} variant="h6">
+                            {state.title + ' user:' + (state.user_id||' your_post')}
+                        </Typography>
+                        <Typography 
+                        onClick={handlerRoute}
+                        sx={{ fontSize: 14 }} 
+                        color="text.secondary" 
+                        gutterBottom>
+                            {state.description}
+                        </Typography>
+                        {"updated at "} 
+                        <Moment style={{ marginBottom: "10px" }} format="DD.MM.YYYY">
+                            {state.updatedAt}
+                        </Moment>
+                    </CardContent>
+                    <CardActions>
+                        <Button onClick={showComments}>Show comments ({state.comments.length})</Button>
+                        {/* <Button style={{padding: "0"}} onClick={showComments}>Add</Button> */}
+                        <IconButton aria-label="delete" onClick={deletePost}>
+                            <DeleteIcon />
+                        </IconButton>
+                        <IconButton aria-label="delete" onClick={handleClickLike} >
+                            <FavoriteIcon />
+                        </IconButton>
+                        <Typography color="text.secondary">
+                            {state.likeCount}
+                        </Typography>
+                        <Button onClick={editMode} style={{display:`${state.editStyle}`}}></Button>
+                    </CardActions>
+                    <Comments display= {state.formComm} comments={state.comments} postId={state.id}></Comments>
+            </Card>
         </ListItem>
     )
 }
-// header = {newPost.title}
-    // user_id = {newPost.user_id}
-    // description = {newPost.description} 
-    // date={newPost.updatedAt.substr(0, 10)} 
-    // key={newPost.id}
-    // id={newPost.id}
-    // comments={newPost.comments.length}
-    // deletePost={deletePost}
-    // redirectOnPost={redirectOnPost}

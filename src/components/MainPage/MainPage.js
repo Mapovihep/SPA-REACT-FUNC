@@ -4,6 +4,7 @@ import { List } from "@mui/material"
 import { Post } from "../MainPageParts/Post"
 import { InputForNewForm } from "../MainPageParts/InputForNewForm"
 import './styles.css'
+import { Outlet } from "react-router"
 
 const MainPage = (props) => {
     const dispatch = useDispatch();
@@ -23,10 +24,11 @@ const MainPage = (props) => {
                 {posts.map(newPost=> 
                 <Post className='post_MainPage'
                 postInfo={newPost}
-                // redirectOnPost={redirectOnPost}
                 key={Math.random()}>
                 </Post>)}
-            </List>       
+            </List>
+            <Outlet /> 
+            {/* нужен для рендера дочерних компонентов роутера        */}
         </div>
     );
 }

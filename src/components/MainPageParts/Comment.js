@@ -1,4 +1,8 @@
-import { Card, Typography} from "@mui/material"
+import { Button,
+     ButtonGroup, 
+     Card, 
+     Typography, 
+     Input} from "@mui/material"
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Moment from 'react-moment';
@@ -13,49 +17,67 @@ export const Comment = props => {
             user_id:  props.commentInfo.user_id, 
             createdAt: props.commentInfo.createdAt, 
             updatedAt: props.commentInfo.updatedAt,
-            id: props.commentInfo.id
+            id: props.commentInfo.id,
+            count: 0,
+            deleted: ''
         })
-    },[])
-    const handlerOnChange = e =>{  
+    },[props]) 
+    const currentUser = userId===stateOfComment.user_id; 
+    const color = currentUser ? '' : 'secondary';
+    const handlerOnChange = e => {  
         setStateOfComment(prevState => ({...prevState, title:e.target.value}))
     }
-    const changeYourComment = e =>{  
-        e.preventDefault();
-        if(userId===stateOfComment.user_id){
-            const ifTrueFunc = () => {
-                setEditMode(false);
-                props.commentInfo.title!==stateOfComment.title&&dispatch(
-                    {type: "CHANGING_COMMENT", 
-                    payload: {commentId: stateOfComment.id, 
-                    value: stateOfComment.title}});
-            }
-            if(stateOfComment.title===''){
+    const delCom = e => {
+        currentUser ? 
+            (window.confirm('Delete this?')&&(
                 dispatch({type: "DELETING_COMMENT", 
-                payload: {commentId: stateOfComment.id, postId: props.postId}})
-            }else{
-                editMode===false ? setEditMode(true) : ifTrueFunc();
-            }
+                payload: {commentId: stateOfComment.id, postId: props.postId}})&&
+                setStateOfComment(prevState => ({...prevState, deleted: 'none'}))              
+                )
+            )
+            : window.alert('You are not the author)')
+    }
+    const changeYourComment = e => {  
+        const dispChange = () => {
+            dispatch({type: "CHANGING_COMMENT", 
+                payload: {commentId: stateOfComment.id, 
+                value: stateOfComment.title}});
+            setEditMode(false)
         }
+        currentUser ? (
+            setEditMode(true)
+        ) : window.alert('You are not the author)')
+        stateOfComment.count%2!==0&&
+        (stateOfComment.title!==props.commentInfo.title ? dispChange() : setEditMode(false))
+        setStateOfComment(prevState => ({...prevState, count: prevState.count+1}))
     }
     return(<Card style={{display: "flex", flexWrap: 'wrap'}} >
-                <button onClick={changeYourComment} style={{margin: "auto"}}>
+            <ButtonGroup variant="contained" style={{margin:"10px auto"}}>
+                <Button size='small' onClick={changeYourComment}>
                     Change comment
-                </button>
+                </Button>
+                <Button size='small' color={color} onClick={delCom}>
+                    Delete comment
+                </Button>
+            </ButtonGroup>
                 {!editMode ? 
                 <Typography style={{display: "block", width: "100%"}}>
                     {stateOfComment.title} 
                 </Typography> 
-                : <textarea onChange={handlerOnChange} style={{margin: "auto"}} value={stateOfComment.title}></textarea>}
+                : <Input onChange={handlerOnChange} 
+                    style={{display: "block", width: "100%"}} 
+                    value={stateOfComment.title}>
+                </Input>}
                 <Typography style={{display: "block", width: "100%"}} id="userId">
                     {stateOfComment.user_id}
                 </Typography>
                 <Typography style={{textAlign: "center", display: "block", width: "50%"}}>
-                    Created at: <Moment format="YYYY.MM.DD">
+                    Created at: <Moment format="DD.MM.YYYY">
                         {stateOfComment.createdAt}
                     </Moment>      
                 </Typography>       
                 <Typography style={{display: "block", width: "50%"}}>
-                    Updated at: <Moment format="YYYY.MM.DD">
+                    Updated at: <Moment format="DD.MM.YYYY">
                         {stateOfComment.updatedAt}
                     </Moment>
                 </Typography>
