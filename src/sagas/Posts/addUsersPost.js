@@ -1,4 +1,5 @@
 import {put} from 'redux-saga/effects' 
+import { ADD_POST } from '../../actions/ReducerActions';
 
 export default function* addUsersPost (post) {
     const response = yield fetch( `https://test-api-post.herokuapp.com/posts/add`, {
@@ -8,6 +9,5 @@ export default function* addUsersPost (post) {
             description: post.description})
         })
         const addResponse = yield response.json();
-        console.log(addResponse)
-    yield put({type: 'ADD_POST', payload: addResponse})
+    yield put({type: ADD_POST, payload: addResponse})
  }

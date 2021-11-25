@@ -1,4 +1,5 @@
 import {put} from 'redux-saga/effects' 
+import { LOG_IN } from '../../actions/ReducerActions';
 
 export default function* logIn(data) {
     const response = yield fetch( "https://test-api-post.herokuapp.com/auth/sign_in", {
@@ -10,5 +11,5 @@ export default function* logIn(data) {
     })
     let token = yield response.headers.get('Authorization');
     token !== null ? localStorage.setItem('token', token) : alert('Access API error!');
-    yield put({ type: "LOGIN_POST", payload: true});
+    yield put({ type: LOG_IN, payload: true});
  }

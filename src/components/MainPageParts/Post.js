@@ -9,12 +9,12 @@ import { Button,
 import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import React,{ useEffect, useState } from "react";
-import { deletePostAction } from "../../actions/MainPageActions";
 import { useDispatch, useSelector } from "react-redux";
 import { Comments } from "./Comments";
 import Moment from "react-moment";
 import { useNavigate } from "react-router";
 import { editIsOver } from "../../actions/PostActions";
+import { DELETE_POST_FETCH } from "../../actions/SagaActions";
 
 export const Post = props => {
     const [state, setPostState] = useState({...props.postInfo, 
@@ -51,18 +51,16 @@ export const Post = props => {
     const deletePost = () => {
         console.log(state.id)
         userId===state.user_id&&window.confirm('Are you sure?') ? 
-        dispatch(deletePostAction(state.id))
+        dispatch({type: DELETE_POST_FETCH, payload: state.id})
         : window.alert('You are not the author of this post');
     }
     const handleClickLike = () => {
         setPostState(state => ({...state, likeCount: state.likeCount+1}))
     }
     const showComments = () => {
-        console.log("i'm there");//////////////////////////////////////////////////////////////////
         commFormState.formComm !== 'block' ? 
         setCommFormState(state => ({...state, formComm: 'block'}))
         : setCommFormState(state => ({...state, formComm: 'none'}));
-        // dispatch({type: 'SET_LAST_CHANGE', payload: {postId: state.id, editMode: state.editMode}})
     }
     const handlerRoute = () => {
         navigate(`/posts/${state.id}`)}

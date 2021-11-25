@@ -1,16 +1,17 @@
+import { LOAD_PROFILE, 
+    LOG_IN,
+    LOG_OUT,
+    LOAD_POSTS,
+    SIGN_UP,
+    DEL_POST,
+    CHANGE_POST,
+    ADD_POST,
+    ADD_COMMENT,
+    DEL_COMMENT,
+    CHANGE_COMMENT,
+    SET_LAST_CHANGE
+ } from "../actions/ReducerActions"
 
-const LOGIN_POST = 'LOGIN_POST'
-const LOAD_PROFILE = 'LOAD_PROFILE'
-const LOAD_POSTS = 'LOAD_POSTS'
-const SIGN_UP_POST = 'SIGN_UP_POST'
-const DEL_POST = 'DEL_POST'
-const LOG_OUT = 'LOG_OUT'
-const CHANGE_POST = 'CHANGE_POST'
-const ADD_POST = 'ADD_POST'
-const ADD_COMMENT = 'ADD_COMMENT'
-const DEL_COMMENT = 'DEL_COMMENT'
-const CHANGE_COMMENT = 'CHANGE_COMMENT'
-const SET_LAST_CHANGE = 'SET_LAST_CHANGE'
 const initialState = {
     posts: [],
     userProfile: [],
@@ -23,7 +24,7 @@ export const sagaReducer = (state = initialState, action) =>{
             localStorage.clear();
             return {...state,
                 loggedIn: false}
-        case SIGN_UP_POST:
+        case SIGN_UP:
             return {...state,
                   signedUp: action.payload
                 } 
@@ -35,7 +36,7 @@ export const sagaReducer = (state = initialState, action) =>{
                     index: action.payload.indexOf(el)
                 })
             }
-            console.log(dates)
+            console.log(dates)///////////////////////////////////////
             dates.sort(function(a, b) {
                 return a - b;
               });
@@ -46,7 +47,7 @@ export const sagaReducer = (state = initialState, action) =>{
             return {...state, 
                 posts: sortedMass
             }
-        case LOGIN_POST:
+        case LOG_IN:
             return {...state,
                     loggedIn: action.payload
                 } 
@@ -77,7 +78,6 @@ export const sagaReducer = (state = initialState, action) =>{
                 posts: updatedPosts}
         case DEL_COMMENT:
             const {postId, commentId} = action.payload;
-            console.log('PostId = ' + postId + ' CommentId = ' + commentId)
             let [currentPostDelComm] = state.posts.filter(post => post.id===postId);
             let numberOfPostDelComm = state.posts.indexOf(currentPostDelComm)
             let arrayWithoutComment = state.posts[numberOfPostDelComm].comments.filter(comm=> comm.id!==commentId)

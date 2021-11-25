@@ -6,6 +6,7 @@ import { Button,
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Moment from 'react-moment';
+import { CHANGE_COMMENT_FETCH, DELETE_COMMENT_FETCH } from "../../actions/SagaActions";
 export const Comment = props => {
     const [editMode, setEditMode] = useState(props.editCommentMode);
     const [stateOfComment, setStateOfComment] = useState(props.commentInfo);
@@ -29,7 +30,7 @@ export const Comment = props => {
     const delCom = e => {
         currentUser ? 
             (window.confirm('Delete this?')&&(
-                dispatch({type: "DELETING_COMMENT", 
+                dispatch({type: DELETE_COMMENT_FETCH, 
                 payload: {commentId: stateOfComment.id, postId: props.postId}})&&
                 setStateOfComment(prevState => ({...prevState, deleted: 'none'}))              
                 )
@@ -38,7 +39,7 @@ export const Comment = props => {
     }
     const changeYourComment = e => {  
         const dispChange = () => {
-            dispatch({type: "CHANGING_COMMENT", 
+            dispatch({type: CHANGE_COMMENT_FETCH, 
                 payload: {commentId: stateOfComment.id, 
                 value: stateOfComment.title}});
             setEditMode(false)

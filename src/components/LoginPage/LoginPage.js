@@ -2,12 +2,13 @@ import { Button, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
+import { LOG_IN_FETCH } from '../../actions/SagaActions';
 const LoginPage = props => {
     const [loginPageInfo, setInfo] = useState({ eMail: '12@mail.ru', password: '1', errorText: ''})
     const dispatch = useDispatch();
     useEffect(()=>{
         if(localStorage.length!==0){
-            dispatch({type:'LOG_IN', state: loginPageInfo})
+            dispatch({type:LOG_IN_FETCH, state: loginPageInfo})
         }
     }, [])
     const handleChange = (e) => {
@@ -19,7 +20,7 @@ const LoginPage = props => {
         }
     const originalLogIn = e => {
         if(loginPageInfo.eMail!==""&&loginPageInfo.password!==""){
-            dispatch({type:'LOG_IN', state: loginPageInfo})
+            dispatch({type:LOG_IN_FETCH, state: loginPageInfo})
         }else{
             setInfo({...loginPageInfo, errorText: "Введите-ка, сударь, все данные"})
         }

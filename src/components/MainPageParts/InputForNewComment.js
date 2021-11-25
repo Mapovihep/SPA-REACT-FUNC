@@ -1,6 +1,7 @@
 import { Button, Input } from "@mui/material"
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { ADD_COMMENT_FETCH } from "../../actions/SagaActions";
 
 export const InputForNewComment = props =>{
     const dispatch = useDispatch();
@@ -13,7 +14,7 @@ export const InputForNewComment = props =>{
     const handlerOnSubmit = e => {
         e.preventDefault();
         if(newComment.value!==''){
-            dispatch({type: 'ADDING_COMMENT', payload: {value: newComment.value, postId: props.postId}});
+            dispatch({type: ADD_COMMENT_FETCH, payload: {value: newComment.value, postId: props.postId}});
             e.target.value='';
         }
     }

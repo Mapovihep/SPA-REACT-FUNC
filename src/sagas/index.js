@@ -1,5 +1,15 @@
-import {takeEvery, call} from 'redux-saga/effects' 
-
+import {takeEvery, call, all} from 'redux-saga/effects' 
+import {
+    SIGN_UP_FETCH,
+    LOG_IN_FETCH,
+    LOAD_USERS_DATA_FETCH,
+    DELETE_POST_FETCH,
+    CHANGING_POST_FETCH,
+    ADD_USERS_POST_FETCH,
+    ADD_COMMENT_FETCH,
+    DELETE_COMMENT_FETCH,
+    CHANGE_COMMENT_FETCH,
+} from '../actions/SagaActions'
 import getPosts from './Posts/getPosts'
 import logIn from './Login/logIn';
 import getProfile from './Profile/getProfile';
@@ -40,18 +50,28 @@ export function* changeCommentWorker(data){
 export function* deleteCommentWorker(data){
     yield call(deleteComment, data)
 }
-export function* watchClickSaga(){
-    yield takeEvery('SIGN_UP', signUpWorker)
-    yield takeEvery('LOG_IN', logInWorker)
-    yield takeEvery('DELETE_POST', deletePostWorker)
-    yield takeEvery('LOAD_USERS_DATA', getProfileWorker)
-    yield takeEvery('ADD_USERS_POST', addPostWorker)
-    yield takeEvery('CHANGING_POST', changePostWorker)
-    yield takeEvery('ADDING_COMMENT', addCommentWorker)
-    yield takeEvery('DELETING_COMMENT', deleteCommentWorker)
-    yield takeEvery('CHANGING_COMMENT', changeCommentWorker)
+export function* watcherSaga(){
+    yield takeEvery(SIGN_UP_FETCH, signUpWorker)
+    yield takeEvery(LOG_IN_FETCH, logInWorker)
+    yield takeEvery(DELETE_POST_FETCH, deletePostWorker)
+    yield takeEvery(LOAD_USERS_DATA_FETCH, getProfileWorker)
+    yield takeEvery(ADD_USERS_POST_FETCH, addPostWorker)
+    yield takeEvery(CHANGING_POST_FETCH, changePostWorker)
+    yield takeEvery(ADD_COMMENT_FETCH, addCommentWorker)
+    yield takeEvery(DELETE_COMMENT_FETCH, deleteCommentWorker)
+    yield takeEvery(CHANGE_COMMENT_FETCH, changeCommentWorker)
+    
+    // yield takeEvery('SIGN_UP', signUpWorker)
+    // yield takeEvery('LOG_IN', logInWorker)
+    // yield takeEvery('DELETE_POST', deletePostWorker)
+    // yield takeEvery('LOAD_USERS_DATA', getProfileWorker)
+    // yield takeEvery('ADD_USERS_POST', addPostWorker)
+    // yield takeEvery('CHANGING_POST', changePostWorker)
+    // yield takeEvery('ADDING_COMMENT', addCommentWorker)
+    // yield takeEvery('DELETING_COMMENT', deleteCommentWorker)
+    // yield takeEvery('CHANGING_COMMENT', changeCommentWorker)
 }
 export default function* rootSaga(){
-    yield watchClickSaga();
+    yield watcherSaga();
 }
 

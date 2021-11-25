@@ -1,4 +1,5 @@
 import {put} from 'redux-saga/effects' 
+import { LOAD_POSTS } from '../../actions/ReducerActions';
 
 export default function* getPosts (){
     const response = yield fetch( "https://test-api-post.herokuapp.com/posts/all", {
@@ -7,6 +8,6 @@ export default function* getPosts (){
         })
         const posts = yield response.json();
         console.log(response)
-    yield put({type : "LOAD_POSTS", payload: posts});
+    yield put({type : LOAD_POSTS, payload: posts});
  }
 

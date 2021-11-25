@@ -2,6 +2,7 @@ import { Card,  Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { LOAD_USERS_DATA_FETCH } from '../../actions/SagaActions';
 import { Post } from '../MainPageParts/Post';
 
 const ProfilePage = props => {
@@ -12,7 +13,7 @@ const ProfilePage = props => {
     useEffect(()=>{getProfileThere()},[])
 
     const getProfileThere = () => {
-        dispatch({type: 'LOAD_USERS_DATA', payload: userProfile})
+        dispatch({type: LOAD_USERS_DATA_FETCH, payload: userProfile})
     }
     
     const ProfileInfo = () => {
@@ -39,7 +40,7 @@ const ProfilePage = props => {
     return(
         <Box style={{display: "flex", flexDirection: "column", alignItems: "center", margin: "20px"}}>
             <ProfileInfo></ProfileInfo>
-            <UsersPosts posts={usersPosts} dispatch={getProfileThere}></UsersPosts>
+            <UsersPosts posts={usersPosts}></UsersPosts>
         </Box>
     )
 }

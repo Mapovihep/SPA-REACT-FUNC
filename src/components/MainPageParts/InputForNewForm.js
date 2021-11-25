@@ -1,7 +1,7 @@
 import { Button, Input } from "@mui/material"
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { inputAction } from "../../actions/MainPageActions"
+import { ADD_USERS_POST_FETCH } from "../../actions/SagaActions"
 
 export const InputForNewForm = () => {
     const userInfo = useSelector(state => state.saga.userProfile)
@@ -15,8 +15,7 @@ export const InputForNewForm = () => {
         user_id:  userInfo.id, 
         createdAt: '', 
         updatedAt: '',
-        comments: [],
-        id: 11111})}, [userInfo])
+        comments: []})}, [userInfo])
     const dispatch = useDispatch();
 
     const setState = (e) => {
@@ -26,7 +25,7 @@ export const InputForNewForm = () => {
         setInputText({...inputInfo, title: postTitle, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()})
     }
     const addPostTitle = e => {
-        dispatch(inputAction(inputInfo))
+        dispatch({type: ADD_USERS_POST_FETCH, payload: inputInfo})
         e.currentTarget.parentNode.querySelector('input').value=''
     }
     return(

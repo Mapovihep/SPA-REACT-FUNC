@@ -1,4 +1,5 @@
 import {put, call} from 'redux-saga/effects'
+import { SIGN_UP } from '../../actions/ReducerActions'
 
 
 export default function* signUp(data){
@@ -11,5 +12,5 @@ export default function* signUp(data){
             first_name: data.firstName, 
             last_name: data.lastName })
     })
-    yield put({type:'SIGN_UP_POST', payload: true})
+    yield put({type: SIGN_UP, payload: true})
 }

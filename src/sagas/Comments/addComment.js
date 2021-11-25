@@ -1,4 +1,5 @@
 import {put} from 'redux-saga/effects' 
+import { ADD_COMMENT } from '../../actions/ReducerActions';
 
 export default function* addComment (comment) {
     const response = yield fetch( `https://test-api-post.herokuapp.com/comments/add`, {
@@ -8,5 +9,5 @@ export default function* addComment (comment) {
             "post_id": comment.payload.postId})
         })
         const addComment = yield response.json();
-    yield put({type: 'ADD_COMMENT', payload: addComment})
+    yield put({type: ADD_COMMENT, payload: addComment})
 }
