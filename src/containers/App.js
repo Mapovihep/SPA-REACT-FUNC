@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Button, ButtonGroup  } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import {  useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -15,17 +15,19 @@ import SignUpPage from "../components/SignUpPage/SignUpPage";
 import { logOut } from "../actions/LogOut";
 import { Post } from "../components/MainPageParts/Post";
 
-const App = props => {
+const App = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.saga.loggedIn);
   const posts = useSelector(state => [...state.page.posts||[], ...state.saga.posts||[]])
-  let {action, token} = logOut();
-  const logOutLocal = () => {dispatch(action)}
-  const redirectOnPost = useSelector((state => state.saga.redirectOnPost));
-  const onPostId = useSelector((state => state.saga.onPostId));//должно меняться из стора
-  const onPostInfo = useSelector((state=>state.saga.onPostInfo));
-  console.log(onPostInfo);
-    return (
+  const logOutLocal = () => {dispatch(logOut())}
+  let postRoutes  = posts.map(newPost=><Route 
+      path={`/posts/${newPost.id}`} 
+      element={<Post 
+      fromRouter={true}
+      postInfo={newPost} />} 
+      key={Math.random()} />)
+  
+  return (
       <Router>
         {
         <div className="header_container__App">
@@ -33,24 +35,22 @@ const App = props => {
             <AppBar position="static" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
               <Toolbar>
             <ButtonGroup variant="contained">
-              <Link to="/"><Button>Main Page</Button></Link>
-              {!loggedIn&&<Link to="/loginPage"><Button>Login Page</Button></Link>}
-              {!loggedIn&&<Link to="/signUpPage"><Button>Sign Up Page</Button></Link>}
-              {loggedIn&&<Link to="/profilePage"><Button>Profile Page</Button></Link>}
-              {loggedIn&&<Link to="/"><Button onClick={logOutLocal}>Log Out</Button></Link>}
-              {/* {redirectOnPost&&<Navigate to={`/posts/:${onPostId}`}/>} */}
+              <Link style={{textDecoration: "none"}} to="/"><Button>Main Page</Button></Link>
+              {!loggedIn&&<Link style={{textDecoration: "none"}} to="/loginPage"><Button>Login Page</Button></Link>}
+              {!loggedIn&&<Link style={{textDecoration: "none"}} to="/signUpPage"><Button>Sign Up Page</Button></Link>}
+              {loggedIn&&<Link style={{textDecoration: "none"}} to="/profilePage"><Button>Profile Page</Button></Link>}
+              {loggedIn&&<Link style={{textDecoration: "none"}} to="/"><Button onClick={logOutLocal}>Log Out</Button></Link>}
             </ButtonGroup>
               </Toolbar>
             </AppBar>
             <Routes>
-              <Route path="/loginPage" element={loggedIn ? <Navigate to="/"/> : <LoginPage/>}></Route>
-              <Route path="/signUpPage" element={loggedIn ? <Navigate to="/"/> : <SignUpPage />} ></Route>
-              <Route path="/profilePage" element={!loggedIn ? <Navigate to="/loginPage"/> : <ProfilePage posts={posts}/>} ></Route>
-              <Route path="/" element={!loggedIn ? <Navigate to="/loginPage"/> : <MainPage posts={posts}/>}></Route>
-              {/* <Route path={`/posts/:${onPostId}`}  element={redirectOnPost&&<Post header=''/>}>{console.log(onPostId)}</Route> */}
-              {redirectOnPost&&<Route path={`/posts/:${onPostId}`} element={onPostInfo===undefined ? <Navigate to={`/`}/> : <Post onPostInfo={onPostInfo}/>}></Route>}
-              {/* <Post onPostInfo={onPostInfo}>{console.log(onPostInfo)}</Post> */}
-              {/* <Route><Navigate to='/'></Navigate></Route> */}
+              <Route path="/loginPage" element={loggedIn ? <Navigate to="/"/> : <LoginPage/>} />
+              <Route path="/signUpPage" element={loggedIn ? <Navigate to="/"/> : <SignUpPage />}  />
+              <Route path="/profilePage" element={!loggedIn ? <Navigate to="/loginPage"/> : <ProfilePage posts={posts}/>}  />
+              <Route path="/" element={!loggedIn ? <Navigate to="/loginPage"/> : <MainPage posts={posts}/>}>
+              </Route>
+              {postRoutes}
+              <Route path="*" element={!loggedIn?<Navigate to="/loginPage"/>:<Navigate to="/"/>}/>
             </Routes>
           </nav>
         </div>}

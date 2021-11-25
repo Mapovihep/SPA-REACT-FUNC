@@ -1,4 +1,4 @@
-
+const REDIRECT_ON_POST = 'REDIRECT_ON_POST'
 const initialState = {
     
 };

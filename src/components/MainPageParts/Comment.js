@@ -7,9 +7,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Moment from 'react-moment';
 export const Comment = props => {
-    const [editMode, setEditMode] = useState(props.editMode)
-    const [stateOfComment, setStateOfComment] = useState(props.commentInfo)
-    const userId = useSelector(state => (state.saga.userProfile.id))
+    const [editMode, setEditMode] = useState(props.editCommentMode);
+    const [stateOfComment, setStateOfComment] = useState(props.commentInfo);
+    const userId = useSelector(state => (state.saga.userProfile.id));
     const dispatch = useDispatch();
     useEffect(()=>{
         setStateOfComment({
@@ -19,7 +19,6 @@ export const Comment = props => {
             updatedAt: props.commentInfo.updatedAt,
             id: props.commentInfo.id,
             count: 0,
-            deleted: ''
         })
     },[props]) 
     const currentUser = userId===stateOfComment.user_id; 
@@ -72,12 +71,12 @@ export const Comment = props => {
                     {stateOfComment.user_id}
                 </Typography>
                 <Typography style={{textAlign: "center", display: "block", width: "50%"}}>
-                    Created at: <Moment format="DD.MM.YYYY">
+                    Created at: <Moment calendar={true}>
                         {stateOfComment.createdAt}
                     </Moment>      
                 </Typography>       
                 <Typography style={{display: "block", width: "50%"}}>
-                    Updated at: <Moment format="DD.MM.YYYY">
+                    Updated at: <Moment calendar={true}>
                         {stateOfComment.updatedAt}
                     </Moment>
                 </Typography>

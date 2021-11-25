@@ -1,22 +1,18 @@
-import { Button, Card, TextField, Typography } from '@mui/material';
+import { Card,  Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePostAction, redirectOnPostAction } from '../../actions/MainPageActions';
-import getProfile from '../../sagas/Profile/getProfile';
-import deletePost from '../../sagas/Posts/deletePost';
 import { Post } from '../MainPageParts/Post';
 
 const ProfilePage = props => {
     const userProfile = useSelector(state => (state.saga.userProfile||[]));
-    const [posts, setPosts] = useState(props.posts)
+    const posts = useSelector(state => (state.saga.posts||[]))
     const usersPosts = posts.filter(el => el.user_id === userProfile.id);
-    const [userInfo, setUserInfo] = useState(userProfile);
     const dispatch = useDispatch();
-    useEffect(()=>{getProfileThere()},[userInfo])
+    useEffect(()=>{getProfileThere()},[])
 
     const getProfileThere = () => {
-        dispatch({type: 'LOAD_USERS_DATA', payload: userInfo})
+        dispatch({type: 'LOAD_USERS_DATA', payload: userProfile})
     }
     
     const ProfileInfo = () => {
@@ -25,16 +21,17 @@ const ProfilePage = props => {
             <Typography>email: {userProfile.email}</Typography>
             <Typography>first_name: {userProfile.first_name}</Typography>
             <Typography>last_name: {userProfile.last_name}</Typography>
-            <Typography>posts: {userProfile.posts ? userProfile.posts.length : ' 0 '}</Typography>
+            <Typography>posts: {usersPosts ? usersPosts.length : ' 0 '}</Typography>
         </Card>
     }
     
-    const UsersPosts = () =>{
+    const UsersPosts = propses =>{
+        const [usersPostsFromProps, setUsersPostsFromProps] = useState(propses.posts)
+        useEffect(()=>{setUsersPostsFromProps(propses.posts)}, [])
         return(
-            usersPosts.map(newPost=> 
+            usersPostsFromProps.map(newPost=> 
                 <Post 
                 postInfo={newPost}
-                // redirectOnPost={redirectOnPost}
                 key={Math.random()}>
                 </Post>)
         )
@@ -42,7 +39,7 @@ const ProfilePage = props => {
     return(
         <Box style={{display: "flex", flexDirection: "column", alignItems: "center", margin: "20px"}}>
             <ProfileInfo></ProfileInfo>
-            <UsersPosts></UsersPosts>
+            <UsersPosts posts={usersPosts} dispatch={getProfileThere}></UsersPosts>
         </Box>
     )
 }

@@ -1,5 +1,5 @@
 import { Button, Input } from "@mui/material"
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 export const InputForNewComment = props =>{
@@ -12,13 +12,15 @@ export const InputForNewComment = props =>{
     }
     const handlerOnSubmit = e => {
         e.preventDefault();
-        dispatch({type: 'ADDING_COMMENT', payload: {value: newComment.value, postId: props.postId}});
-        e.target.value='';
+        if(newComment.value!==''){
+            dispatch({type: 'ADDING_COMMENT', payload: {value: newComment.value, postId: props.postId}});
+            e.target.value='';
+        }
     }
     return (<form onSubmit={handlerOnSubmit}>
                 <Input placeholder="Введите свой комментарий"
                 style={{width: "90%"}}
                 onChange={handlerOnChange}/>
-                <Button onClick={handlerOnSubmit}>Добавить коммент</Button>
+                <Button onClick={handlerOnSubmit}>Add Comment</Button>
             </form>)
 }

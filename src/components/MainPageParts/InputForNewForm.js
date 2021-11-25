@@ -27,7 +27,6 @@ export const InputForNewForm = () => {
     }
     const addPostTitle = e => {
         dispatch(inputAction(inputInfo))
-        console.log(inputInfo)
         e.currentTarget.parentNode.querySelector('input').value=''
     }
     return(

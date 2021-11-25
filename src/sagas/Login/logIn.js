@@ -9,9 +9,6 @@ export default function* logIn(data) {
             password: data.password})
     })
     let token = yield response.headers.get('Authorization');
-    if (token !== null) {
-        localStorage.setItem('token', token);
-    }
-    
+    token !== null ? localStorage.setItem('token', token) : alert('Access API error!');
     yield put({ type: "LOGIN_POST", payload: true});
  }

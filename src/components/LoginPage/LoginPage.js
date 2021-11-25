@@ -1,11 +1,15 @@
 import { Button, TextField } from '@mui/material';
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 const LoginPage = props => {
     const [loginPageInfo, setInfo] = useState({ eMail: '12@mail.ru', password: '1', errorText: ''})
     const dispatch = useDispatch();
-    
+    useEffect(()=>{
+        if(localStorage.length!==0){
+            dispatch({type:'LOG_IN', state: loginPageInfo})
+        }
+    }, [])
     const handleChange = (e) => {
         const field = e.currentTarget;
         const type = field.id;

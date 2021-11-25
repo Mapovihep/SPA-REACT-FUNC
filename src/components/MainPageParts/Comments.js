@@ -6,10 +6,10 @@ export const Comments = props => {
     for(let el of props.comments){
         commArray.push({...el, editMode: false, key: Math.round(Math.random()*100000)})
     }
-    const [stateOfPage, setStateOfPage] = useState({inputValue: '', editMode: false, comments: commArray});
+    const [stateOfPage, setStateOfPage] = useState({comments: commArray});
     useEffect(()=>{
         setStateOfPage({
-            inputValue: '', editMode: false, comments: commArray
+            comments: commArray
         })
     }, [])
     return(

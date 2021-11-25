@@ -19,13 +19,9 @@ const SignUpPage = () => {
     }
    
     const signUpDisp = e => {
-        if(info.eMail!==""&&info.password!==""&&info.lastName!==""&&info.firstName!==""){
-            console.log("диспатчим, господа")
+        info.eMail!==""&&info.password!==""&&info.lastName!==""&&info.firstName!=="" ?
         dispatch({type: 'SIGN_UP', state: info})
-        }else{
-            console.log("не диспатчим, господа")
-            setInfo({...info, errorText: "Введите-ка, сударь, все данные"})
-        }
+        : setInfo({...info, errorText: "Введите-ка, сударь, все данные"})
         const textFields = e.currentTarget.parentNode.querySelectorAll('input');
         for(let t of textFields){
             t.value=''
