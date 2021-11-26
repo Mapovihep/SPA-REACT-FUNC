@@ -1,4 +1,5 @@
 import {put} from 'redux-saga/effects' 
+import { DEL_POST } from '../../actions/ReducerActions';
 
 export default function* deletePost (id){
     const response = yield fetch( `https://test-api-post.herokuapp.com/posts/post/${id.payload}`, {
@@ -7,5 +8,5 @@ export default function* deletePost (id){
         })
         const deleteResponse = yield response.json();
         console.log(deleteResponse)
-    yield put({type: "DEL_POST", payload: id.payload});
+    yield put({type: DEL_POST, payload: id.payload});
  }

@@ -19,11 +19,9 @@ const LoginPage = props => {
         : setInfo({...loginPageInfo, password: field.value})
         }
     const originalLogIn = e => {
-        if(loginPageInfo.eMail!==""&&loginPageInfo.password!==""){
-            dispatch({type:LOG_IN_FETCH, state: loginPageInfo})
-        }else{
-            setInfo({...loginPageInfo, errorText: "Введите-ка, сударь, все данные"})
-        }
+        loginPageInfo.eMail!==""&&loginPageInfo.password!=="" ?
+        dispatch({type:LOG_IN_FETCH, state: loginPageInfo}) 
+        : setInfo({...loginPageInfo, errorText: "Введите-ка, сударь, все данные"})
         const textFields = e.currentTarget.parentNode.querySelectorAll('input');
         for(let t of textFields){t.value=''}
     }

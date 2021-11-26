@@ -18,7 +18,7 @@ import { Post } from "../components/MainPageParts/Post";
 const App = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.saga.loggedIn);
-  const posts = useSelector(state => [...state.page.posts||[], ...state.saga.posts||[]])
+  const posts = useSelector(state => [...state.saga.posts||[]])
   const logOutLocal = () => {dispatch(logOut())}
   let postRoutes  = posts.map(newPost=><Route 
       path={`/posts/${newPost.id}`} 

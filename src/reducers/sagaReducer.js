@@ -16,7 +16,26 @@ const initialState = {
     posts: [],
     userProfile: [],
     loggedIn: false,
-    editCommentMode: false
+}
+const sorting = arr => {
+    let dates = [];
+    for(let el of arr){
+        dates.unshift(Math.round(new Date(el.createdAt).getTime()/1000))
+    }
+    dates.sort(function(a, b) { return a - b });
+    let sortedDate = []
+    for(let el of arr){
+        for(let date of dates){
+            if(date===Math.round(new Date(el.createdAt).getTime()/1000)){
+                sortedDate.unshift({...el, editCommentMode: false});
+                if(el.comments&&el.comments.length!==undefined&&el.comments.length!==0&&el.comments.length!==1){
+                    let array = sorting(el.comments);
+                    el.comments = array;
+                }
+            }
+        }
+    }
+    return sortedDate
 }
 export const sagaReducer = (state = initialState, action) =>{
        switch (action.type) {
@@ -29,23 +48,8 @@ export const sagaReducer = (state = initialState, action) =>{
                   signedUp: action.payload
                 } 
         case LOAD_POSTS: 
-            let dates = [];
-            for(let el of action.payload){
-                dates.unshift({
-                    date: Math.round(new Date(el.createdAt).getTime()/10000),
-                    index: action.payload.indexOf(el)
-                })
-            }
-            console.log(dates)///////////////////////////////////////
-            dates.sort(function(a, b) {
-                return a - b;
-              });
-            let sortedMass = [];
-            for(let el of action.payload){
-                sortedMass.unshift({...el, editCommentMode: false})
-            }
             return {...state, 
-                posts: sortedMass
+                posts: sorting(action.payload)
             }
         case LOG_IN:
             return {...state,
@@ -84,7 +88,6 @@ export const sagaReducer = (state = initialState, action) =>{
             let postsDelComm = state.posts;
             postsDelComm[numberOfPostDelComm].comments = arrayWithoutComment;
             postsDelComm[numberOfPostDelComm].editCommentMode = true;
-            console.log(state.posts[numberOfPostDelComm]);
             return {...state, 
                 posts: postsDelComm
             }
@@ -110,6 +113,9 @@ export const sagaReducer = (state = initialState, action) =>{
             let postsAddComm = state.posts;
             postsAddComm[numberOfPostAddCom].comments = [...state.posts[numberOfPostAddCom].comments,
             action.payload]
+            console.log(state.posts[numberOfPostAddCom].comments)
+            state.posts[numberOfPostAddCom].comments = sorting(state.posts[numberOfPostAddCom].comments)
+            console.log(state.posts[numberOfPostAddCom].comments)
             postsAddComm[numberOfPostAddCom].editCommentMode = true;
             return {...state,
             posts: postsAddComm}
@@ -118,7 +124,6 @@ export const sagaReducer = (state = initialState, action) =>{
             let [lastChangedPost] = postsAfterShowComm.filter(el => el.id===action.payload.postId);
             let ind = postsAfterShowComm.indexOf(lastChangedPost);
             postsAfterShowComm[ind].editCommentMode = action.payload.editMode;
-            console.log(lastChangedPost) 
             return {...state,
                 posts: postsAfterShowComm}
         default:

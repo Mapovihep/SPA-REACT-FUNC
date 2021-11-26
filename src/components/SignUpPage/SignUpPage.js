@@ -1,6 +1,7 @@
 import { Button, TextField } from '@mui/material';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { SIGN_UP_FETCH } from '../../actions/SagaActions';
 
 const SignUpPage = () => {
@@ -54,9 +55,11 @@ const SignUpPage = () => {
                     onChange={handleChange}
                     style={{margin: "10px 0"}}
                 />
-                <Button onClick={signUpDisp}>
-                    Sign Up
-                </Button>
+                <Link to="loginPage">
+                    <Button onClick={signUpDisp}>
+                        Sign Up
+                    </Button>
+                </Link>
                 <span>{info.errorText}</span>
         </div>
     )

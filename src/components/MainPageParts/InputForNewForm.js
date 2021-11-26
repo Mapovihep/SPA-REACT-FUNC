@@ -34,15 +34,15 @@ export const InputForNewForm = () => {
         onSubmit={setState}>
             <Input 
             onChange={setState}
-            // onKeyPress={addPost}            
             type="text"
             placeholder="Введи-ка заголовок будущего поста"
             style={{margin: "20px", width: "70%"}}
-        ></Input>
-        <Button
+            ></Input>
+            <Button
             variant="contained"
-            onClick={addPostTitle}
-        >Contained</Button>
+            onClick={addPostTitle}>
+                Set the Post
+            </Button>
         </form>
     )
 }

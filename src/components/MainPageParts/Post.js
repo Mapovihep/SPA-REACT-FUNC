@@ -14,7 +14,7 @@ import { Comments } from "./Comments";
 import Moment from "react-moment";
 import { useNavigate } from "react-router";
 import { editIsOver } from "../../actions/PostActions";
-import { DELETE_POST_FETCH } from "../../actions/SagaActions";
+import { CHANGING_POST_FETCH, DELETE_POST_FETCH } from "../../actions/SagaActions";
 
 export const Post = props => {
     const [state, setPostState] = useState({...props.postInfo, 
@@ -23,7 +23,7 @@ export const Post = props => {
         editStyle: 'none', 
         actionCount: 0})  
     const [commFormState, setCommFormState] = useState({
-        formComm: "none", 
+        formCommStyle: "none", 
     })
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -34,22 +34,31 @@ export const Post = props => {
             editMode: false, 
             editStyle: 'none', 
             actionCount: 0});
-        setCommFormState({formComm: "none"})
         props.fromRouter!==undefined&&setPostState(state => ({...state, editStyle: 'block'}))
-        console.log(state.editCommentMode)
-        if(state.editCommentMode){
-            setCommFormState(state => ({...state, formComm: 'block'}))
-        }
-    },[props])
-    
+        // console.log(state.editCommentMode)
+        state.editCommentMode ?
+        setCommFormState({formCommStyle: 'block'}) :
+        (props.fromRouter!==undefined ? 
+        setCommFormState({formCommStyle: 'block'})
+        : setCommFormState({formCommStyle: "none"}))
+    },[])
+    const editIsOver = () => {
+        (state.title!==props.postInfo.title||state.description!==props.postInfo.description)&&
+            dispatch({type: CHANGING_POST_FETCH, payload: {comments: state.comments,
+            createdAt: state.createdAt,
+            description: state.description,
+            id: state.id,
+            title: state.title,
+            updatedAt: state.updatedAt,
+            user_id: state.user_id}})
+    };
     const editMode = () => {
         state.actionCount%2===0 ? 
         setPostState(state => ({...state, editMode: true, actionCount: state.actionCount+1}))
         : setPostState(state => ({...state, editMode: false, actionCount: state.actionCount+1}));
-        editIsOver(state, props);
+        editIsOver();
     }
     const deletePost = () => {
-        console.log(state.id)
         userId===state.user_id&&window.confirm('Are you sure?') ? 
         dispatch({type: DELETE_POST_FETCH, payload: state.id})
         : window.alert('You are not the author of this post');
@@ -58,9 +67,9 @@ export const Post = props => {
         setPostState(state => ({...state, likeCount: state.likeCount+1}))
     }
     const showComments = () => {
-        commFormState.formComm !== 'block' ? 
-        setCommFormState(state => ({...state, formComm: 'block'}))
-        : setCommFormState(state => ({...state, formComm: 'none'}));
+        commFormState.formCommStyle !== 'block' ? 
+        setCommFormState(state => ({...state, formCommStyle: 'block'}))
+        : setCommFormState(state => ({...state, formCommStyle: 'none'}));
     }
     const handlerRoute = () => {
         navigate(`/posts/${state.id}`)}
@@ -77,9 +86,17 @@ export const Post = props => {
                         style={{display: 'block', width: '100%'}}
                         onChange={handlerChangePost} 
                         value={state.title}/>
-                        : <Typography onClick={handlerRoute} variant="h6">
-                            {state.title + ' user:' + (state.user_id||' your_post')}
-                        </Typography>}
+                        : <div>
+                            <Typography onClick={handlerRoute} style={{display: "inline-block", width: "50%"}} variant="h6">
+                                {state.title}
+                            </Typography>
+                            <Typography 
+                            onClick={handlerRoute} 
+                            style={{display: "inline-block", width: "20%", marginLeft: 'auto'}}
+                            variant="h6">
+                                {(' user: '+ state.user_id||' your_post')}
+                            </Typography>
+                        </div>}
                         {state.editMode ? 
                         <textarea 
                         style={{display: 'block', width: '100%'}}
@@ -92,9 +109,9 @@ export const Post = props => {
                         gutterBottom>
                             {state.description}
                         </Typography>}
-                        {"updated "} 
+                        {"created "} 
                         <Moment style={{ marginBottom: "10px" }} calendar={true}>
-                            {state.updatedAt} 
+                            {state.createdAt} 
                         </Moment>
                     </CardContent>
                     <CardActions>
@@ -111,7 +128,7 @@ export const Post = props => {
                         <Button onClick={editMode} style={{display:`${state.editStyle}`}}>Edit</Button>
                     </CardActions>
                     <Comments 
-                    display= {commFormState.formComm} 
+                    display= {commFormState.formCommStyle} 
                     comments={state.comments} 
                     postId={state.id}/>
             </Card>

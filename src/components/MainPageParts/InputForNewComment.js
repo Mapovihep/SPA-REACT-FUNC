@@ -18,10 +18,10 @@ export const InputForNewComment = props =>{
             e.target.value='';
         }
     }
-    return (<form onSubmit={handlerOnSubmit}>
+    return (<div onSubmit={handlerOnSubmit}>
                 <Input placeholder="Введите свой комментарий"
                 style={{width: "90%"}}
                 onChange={handlerOnChange}/>
                 <Button onClick={handlerOnSubmit}>Add Comment</Button>
-            </form>)
+            </div>)
 }
