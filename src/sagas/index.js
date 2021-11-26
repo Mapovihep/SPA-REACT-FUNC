@@ -3,6 +3,7 @@ import {
     SIGN_UP_FETCH,
     LOG_IN_FETCH,
     LOAD_USERS_DATA_FETCH,
+    LOAD_POSTS_FETCH,
     DELETE_POST_FETCH,
     CHANGING_POST_FETCH,
     ADD_USERS_POST_FETCH,
@@ -32,6 +33,9 @@ export function* logInWorker(data){
 export function* getProfileWorker(){
     yield call(getProfile)
 }
+export function* loadPostsWorker(){
+    yield call(getPosts)
+}
 export function* addPostWorker(data){
     yield call(addUsersPost, data.payload)
 }
@@ -54,6 +58,7 @@ export function* watcherSaga(){
     yield takeEvery(SIGN_UP_FETCH, signUpWorker)
     yield takeEvery(LOG_IN_FETCH, logInWorker)
     yield takeEvery(DELETE_POST_FETCH, deletePostWorker)
+    yield takeEvery(LOAD_POSTS_FETCH, loadPostsWorker)
     yield takeEvery(LOAD_USERS_DATA_FETCH, getProfileWorker)
     yield takeEvery(ADD_USERS_POST_FETCH, addPostWorker)
     yield takeEvery(CHANGING_POST_FETCH, changePostWorker)
