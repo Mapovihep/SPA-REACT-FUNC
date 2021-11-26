@@ -14,6 +14,7 @@ import { Comments } from "./Comments";
 import Moment from "react-moment";
 import { useNavigate } from "react-router";
 import { editIsOver } from "../../actions/PostActions";
+import { useLocation } from "react-router";
 import { CHANGING_POST_FETCH, DELETE_POST_FETCH } from "../../actions/SagaActions";
 
 export const Post = props => {
@@ -27,6 +28,8 @@ export const Post = props => {
     })
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+
     const userId = useSelector(state => (state.saga.userProfile.id))
     useEffect(()=>{
         setPostState({...props.postInfo, 
@@ -72,7 +75,8 @@ export const Post = props => {
         : setCommFormState(state => ({...state, formCommStyle: 'none'}));
     }
     const handlerRoute = () => {
-        navigate(`/posts/${state.id}`)}
+        pathname!==`/posts/${state.id}`&&
+        navigate(`/posts/${state.id}`)&&console.log(pathname)}
     const handlerChangePost = e =>{
         e.target.type!=='textarea' ?
         setPostState(state => ({...state, title: e.target.value}))
@@ -81,17 +85,16 @@ export const Post = props => {
     return(
         <ListItem>    
             <Card style={{height: "100%", width: "90vw", display: "flex", flexDirection: "column"}}>      
-                    <CardContent>
+                    <CardContent onClick={handlerRoute}>
                         {state.editMode ? <Input 
                         style={{display: 'block', width: '100%'}}
                         onChange={handlerChangePost} 
                         value={state.title}/>
                         : <div>
-                            <Typography onClick={handlerRoute} style={{display: "inline-block", width: "50%"}} variant="h6">
+                            <Typography style={{display: "inline-block", width: "50%"}} variant="h6">
                                 {state.title}
                             </Typography>
                             <Typography 
-                            onClick={handlerRoute} 
                             style={{display: "inline-block", width: "20%", marginLeft: 'auto'}}
                             variant="h6">
                                 {(' user: '+ state.user_id||' your_post')}
@@ -103,7 +106,6 @@ export const Post = props => {
                         onChange={handlerChangePost} 
                         value={state.description}/> 
                         : <Typography 
-                        onClick={handlerRoute}
                         sx={{ fontSize: 14 }} 
                         color="text.secondary" 
                         gutterBottom>

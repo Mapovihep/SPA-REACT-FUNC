@@ -12,14 +12,14 @@ import LoginPage from "../components/LoginPage/LoginPage";
 import MainPage from "../components/MainPage/MainPage";
 import ProfilePage from "../components/ProfilePage/ProfilePage";
 import SignUpPage from "../components/SignUpPage/SignUpPage";
-import { logOut } from "../actions/LogOut";
 import { Post } from "../components/MainPageParts/Post";
+import { LOG_OUT } from "../actions/ReducerActions";
 
 const App = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.saga.loggedIn);
   const posts = useSelector(state => [...state.saga.posts||[]])
-  const logOutLocal = () => {dispatch(logOut())}
+  const logOutLocal = () => {dispatch({type:LOG_OUT})}
   let postRoutes  = posts.map(newPost=><Route 
       path={`/posts/${newPost.id}`} 
       element={<Post 

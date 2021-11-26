@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { LOG_IN_FETCH } from '../../actions/SagaActions';
 const LoginPage = props => {
-    const [loginPageInfo, setInfo] = useState({ eMail: '12@mail.ru', password: '1', errorText: ''})
+    const [loginPageInfo, setInfo] = useState({ eMail: '', password: '', errorText: ''})
     const dispatch = useDispatch();
     useEffect(()=>{
         if(localStorage.length!==0){

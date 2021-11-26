@@ -60,16 +60,6 @@ export function* watcherSaga(){
     yield takeEvery(ADD_COMMENT_FETCH, addCommentWorker)
     yield takeEvery(DELETE_COMMENT_FETCH, deleteCommentWorker)
     yield takeEvery(CHANGE_COMMENT_FETCH, changeCommentWorker)
-    
-    // yield takeEvery('SIGN_UP', signUpWorker)
-    // yield takeEvery('LOG_IN', logInWorker)
-    // yield takeEvery('DELETE_POST', deletePostWorker)
-    // yield takeEvery('LOAD_USERS_DATA', getProfileWorker)
-    // yield takeEvery('ADD_USERS_POST', addPostWorker)
-    // yield takeEvery('CHANGING_POST', changePostWorker)
-    // yield takeEvery('ADDING_COMMENT', addCommentWorker)
-    // yield takeEvery('DELETING_COMMENT', deleteCommentWorker)
-    // yield takeEvery('CHANGING_COMMENT', changeCommentWorker)
 }
 export default function* rootSaga(){
     yield watcherSaga();
