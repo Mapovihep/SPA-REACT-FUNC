@@ -4,3 +4,6 @@
     align-items: center;
     margin: 20px;
 }
+.password, .login{
+    margin: 0 0 10px 0;
+}

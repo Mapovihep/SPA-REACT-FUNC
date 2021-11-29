@@ -3,12 +3,13 @@ import  './styles.css'
 import { Button, TextField } from '@mui/material';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { SIGN_UP_FETCH } from '../../actions/SagaActions';
 
 const SignUpPage = () => {
     const [info, setInfo] = useState({ eMail: '', password: '', firstName: '', lastName: '', errorText: ''})
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const field = e.currentTarget;
@@ -23,7 +24,7 @@ const SignUpPage = () => {
    
     const signUpDisp = e => {
         info.eMail!==""&&info.password!==""&&info.lastName!==""&&info.firstName!=="" ?
-        dispatch({type: SIGN_UP_FETCH, state: info})
+        dispatch({type: SIGN_UP_FETCH, state: info})&&navigate("loginPage")
         : setInfo({...info, errorText: "Введите-ка, сударь, все данные"})
         const textFields = e.currentTarget.parentNode.querySelectorAll('input');
         for(let t of textFields){
@@ -57,11 +58,9 @@ const SignUpPage = () => {
                     onChange={handleChange}
                     style={{margin: "10px 0"}}
                 />
-                <Link to="loginPage">
-                    <Button onClick={signUpDisp}>
-                        Sign Up
-                    </Button>
-                </Link>
+                <Button onClick={signUpDisp}>
+                    Sign Up
+                </Button>
                 <span>{info.errorText}</span>
         </div>
     )
