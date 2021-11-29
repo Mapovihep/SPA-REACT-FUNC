@@ -113,9 +113,7 @@ export const sagaReducer = (state = initialState, action) =>{
             let postsAddComm = state.posts;
             postsAddComm[numberOfPostAddCom].comments = [...state.posts[numberOfPostAddCom].comments,
             action.payload]
-            console.log(state.posts[numberOfPostAddCom].comments)
             state.posts[numberOfPostAddCom].comments = sorting(state.posts[numberOfPostAddCom].comments)
-            console.log(state.posts[numberOfPostAddCom].comments)
             postsAddComm[numberOfPostAddCom].editCommentMode = true;
             return {...state,
             posts: postsAddComm}

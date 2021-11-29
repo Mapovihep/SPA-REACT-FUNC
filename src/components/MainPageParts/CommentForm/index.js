@@ -13,7 +13,7 @@ export const Comments = props => {
         setStateOfPage({
             comments: commArray
         })
-    }, [])
+    }, [props])
     return(
         <form className='show_comments_form' style={{ display: `${props.display}`}}>
             {stateOfPage.comments.map(newComment=>

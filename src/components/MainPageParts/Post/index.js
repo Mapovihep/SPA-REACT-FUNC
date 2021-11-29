@@ -45,7 +45,7 @@ export const Post = props => {
         (props.fromRouter!==undefined ? 
         setCommFormState({formCommStyle: 'block'})
         : setCommFormState({formCommStyle: "none"}))
-    },[])
+    },[props])
     const editIsOver = () => {
         (state.title!==props.postInfo.title||state.description!==props.postInfo.description)&&
             dispatch({type: CHANGING_POST_FETCH, payload: {comments: state.comments,

@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import {  LOG_IN } from '../../actions/ReducerActions';
 import { LOAD_POSTS_FETCH, LOG_IN_FETCH } from '../../actions/SagaActions';
+import  './styles.css'
+
 const LoginPage = props => {
     const [loginPageInfo, setInfo] = useState({ eMail: '', password: '', errorText: ''})
     const dispatch = useDispatch();
@@ -29,7 +31,7 @@ const LoginPage = props => {
     }
     
     return(
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center", margin: "20px"}}>
+        <div className="login_Page">
                 <TextField
                     id="Login"
                     placeholder="Login"

@@ -1,4 +1,4 @@
-import {takeEvery, call, all} from 'redux-saga/effects' 
+import {takeEvery, call, all, fork} from 'redux-saga/effects' 
 import {
     SIGN_UP_FETCH,
     LOG_IN_FETCH,
@@ -28,7 +28,6 @@ export function* signUpWorker(data){
 export function* logInWorker(data){
     yield call(logIn, data.state)
     yield call(getPosts)
-    yield call(getProfile)
 }
 export function* getProfileWorker(){
     yield call(getProfile)

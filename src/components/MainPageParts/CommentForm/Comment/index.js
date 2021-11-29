@@ -23,7 +23,7 @@ export const Comment = props => {
             id: props.commentInfo.id,
             count: 0,
         })
-    },[props]) 
+    },[]) 
     const currentUser = userId===stateOfComment.user_id; 
     const color = currentUser ? '' : 'secondary';
     const handlerOnChange = e => {  
@@ -40,7 +40,7 @@ export const Comment = props => {
             : window.alert('You are not the author)')
     }
     const changeYourComment = e => {  
-        const dispChange = () => {
+        const dispChange = e => {
             dispatch({type: CHANGE_COMMENT_FETCH, 
                 payload: {commentId: stateOfComment.id, 
                 value: stateOfComment.title}});
@@ -50,7 +50,9 @@ export const Comment = props => {
             setEditMode(true)
         ) : window.alert('You are not the author)')
         stateOfComment.count%2!==0&&
-        (stateOfComment.title!==props.commentInfo.title ? dispChange() : setEditMode(false))
+        (stateOfComment.title!==props.commentInfo.title ? 
+            dispChange(e) 
+            : setEditMode(false))
         setStateOfComment(prevState => ({...prevState, count: prevState.count+1}))
     }
     return(<Card className="comment_container" >
