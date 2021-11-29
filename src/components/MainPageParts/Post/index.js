@@ -39,7 +39,6 @@ export const Post = props => {
             editStyle: 'none', 
             actionCount: 0});
         props.fromRouter!==undefined&&setPostState(state => ({...state, editStyle: 'block'}))
-        // console.log(state.editCommentMode)
         state.editCommentMode ?
         setCommFormState({formCommStyle: 'block'}) :
         (props.fromRouter!==undefined ? 
