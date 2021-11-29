@@ -43,22 +43,27 @@ export const sagaReducer = (state = initialState, action) =>{
             localStorage.clear();
             return {...state,
                 loggedIn: false}
+
         case SIGN_UP:
             return {...state,
                   signedUp: action.payload
                 } 
+
         case LOAD_POSTS: 
             return {...state, 
                 posts: sorting(action.payload)
             }
+
         case LOG_IN:
             return {...state,
                     loggedIn: action.payload
                 } 
+
         case LOAD_PROFILE:
             return {...state,
                     userProfile: action.payload
                 }
+                
         case CHANGE_POST:
             let changedPostIndex = {}; 
             for(let post of state.posts){
@@ -70,6 +75,7 @@ export const sagaReducer = (state = initialState, action) =>{
             postsWithChangedPost[changedPostIndex] = action.payload;
             return {...state,
                 posts: postsWithChangedPost}
+
         case DEL_POST:
             let mass = state.posts.filter(el => el.id !== action.payload)
             return {...state,
@@ -80,6 +86,7 @@ export const sagaReducer = (state = initialState, action) =>{
             updatedPosts.unshift({...action.payload, comments:[]});
             return {...state,
                 posts: updatedPosts}
+
         case DEL_COMMENT:
             const {postId, commentId} = action.payload;
             let [currentPostDelComm] = state.posts.filter(post => post.id===postId);
@@ -91,6 +98,7 @@ export const sagaReducer = (state = initialState, action) =>{
             return {...state, 
                 posts: postsDelComm
             }
+
         case CHANGE_COMMENT:  
             let numberOfChangedPost = 0;
             for(let element of state.posts){
@@ -107,6 +115,7 @@ export const sagaReducer = (state = initialState, action) =>{
                 numberOfChangedPost++;
             }
             return state
+
         case ADD_COMMENT: 
             let [currentPostAddCom] = state.posts.filter(post=> post.id===action.payload.post_id);
             let numberOfPostAddCom = state.posts.indexOf(currentPostAddCom)
@@ -117,6 +126,7 @@ export const sagaReducer = (state = initialState, action) =>{
             postsAddComm[numberOfPostAddCom].editCommentMode = true;
             return {...state,
             posts: postsAddComm}
+
         case SET_LAST_CHANGE:
             let postsAfterShowComm = state.posts;
             let [lastChangedPost] = postsAfterShowComm.filter(el => el.id===action.payload.postId);
@@ -124,6 +134,7 @@ export const sagaReducer = (state = initialState, action) =>{
             postsAfterShowComm[ind].editCommentMode = action.payload.editMode;
             return {...state,
                 posts: postsAfterShowComm}
+
         default:
             return state
        }

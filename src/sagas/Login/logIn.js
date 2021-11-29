@@ -1,4 +1,5 @@
 import {put} from 'redux-saga/effects' 
+import { loadPostsWorker } from '..';
 import { LOG_IN } from '../../actions/ReducerActions';
 import { LOAD_USERS_DATA_FETCH } from '../../actions/SagaActions';
 
@@ -14,7 +15,6 @@ export default function* logIn(data) {
     if(token !== null){
         localStorage.setItem('token', token);
         yield put({ type: LOG_IN, payload: true})
-        yield put({type: LOAD_USERS_DATA_FETCH})
     }else{
         alert('Access API error!');
     }

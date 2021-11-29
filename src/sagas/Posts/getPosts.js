@@ -9,6 +9,5 @@ export default function* getPosts (){
         })
         const posts = yield response.json();
     yield put({type : LOAD_POSTS, payload: posts});
-    yield put({type: LOAD_USERS_DATA_FETCH})
  }
 

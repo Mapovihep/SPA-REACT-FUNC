@@ -28,18 +28,18 @@ const App = () => {
       fromRouter={true}
       postInfo={newPost} />} 
       key={Math.random()} />)
-  
+  const s = {textDecoration: "none"};
   return (
         <Router>
         {<nav className="header_container__App">
             <AppBar position="static" className="header_content">
               <Toolbar>
             <ButtonGroup variant="contained" >
-              <Link style={{textDecoration: "none"}} to="/"><Button>Main Page</Button></Link>
-              {!loggedIn&&<Link style={{textDecoration: "none"}} to="/loginPage"><Button>Login Page</Button></Link>}
-              {!loggedIn&&<Link style={{textDecoration: "none"}} to="/signUpPage"><Button>Sign Up Page</Button></Link>}
-              {loggedIn&&<Link style={{textDecoration: "none"}} to="/profilePage"><Button>Profile Page</Button></Link>}
-              {loggedIn&&<Link style={{textDecoration: "none"}} to="/"><Button onClick={logOutLocal}>Log Out</Button></Link>}
+              {loggedIn&&<Link style={s} to="/"><Button>Main Page</Button></Link>}
+              {!loggedIn&&<Link style={s} to="/loginPage"><Button>Login Page</Button></Link>}
+              {!loggedIn&&<Link style={s} to="/signUpPage"><Button>Sign Up Page</Button></Link>}
+              {loggedIn&&<Link style={s} to="/profilePage"><Button>Profile Page</Button></Link>}
+              {loggedIn&&<Link style={s} to="/"><Button onClick={logOutLocal}>Log Out</Button></Link>}
             </ButtonGroup>
               </Toolbar>
             </AppBar>
@@ -49,8 +49,8 @@ const App = () => {
               <Route path="/profilePage" element={!loggedIn ? <Navigate to="/loginPage"/> : <ProfilePage posts={posts}/>}  />
               <Route path="/" element={!loggedIn ? <Navigate to="/loginPage"/> : <MainPage posts={posts}/>}>
               </Route>
-              {postRoutes}
               <Route path="*" element={!loggedIn?<Navigate to="/loginPage"/>:<Navigate to="/"/>}/>
+              {postRoutes}
             </Routes>
           </nav>}
       </Router>)  

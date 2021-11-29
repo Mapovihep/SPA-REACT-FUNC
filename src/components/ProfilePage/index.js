@@ -11,10 +11,8 @@ const ProfilePage = props => {
     const userProfile = useSelector(state => (state.saga.userProfile||[]));
     const posts = useSelector(state => (state.saga.posts||[]))
     const usersPosts = posts.filter(el => el.user_id === userProfile.id);
-    const [ profileState, setProfileState ] = useState(userProfile);
     const dispatch = useDispatch();
   
-
     const getProfileThere = () => {
         dispatch({type: LOAD_USERS_DATA_FETCH})
     }

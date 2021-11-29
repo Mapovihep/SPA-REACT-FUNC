@@ -3,7 +3,6 @@ import { List } from "@mui/material"
 import { Post } from "../MainPageParts/Post"
 import { InputForNewPost } from "../MainPageParts/InputForNewPost"
 import './styles.css'
-import { Outlet } from "react-router"
 
 const MainPage = props => {
     const [posts, setPosts] = useState(props.posts||[]);
@@ -23,7 +22,6 @@ const MainPage = props => {
             key={Math.random()}>
             </Post>)}
             </List>
-            <Outlet /> 
         </div>
     );
 }

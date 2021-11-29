@@ -22,15 +22,15 @@ export const Comment = props => {
             updatedAt: props.commentInfo.updatedAt,
             id: props.commentInfo.id,
             count: 0,
+            currentUser: userId===stateOfComment.user_id
         })
     },[]) 
-    const currentUser = userId===stateOfComment.user_id; 
-    const color = currentUser ? '' : 'secondary';
+    const color = stateOfComment.currentUser ? '' : 'secondary';
     const handlerOnChange = e => {  
         setStateOfComment(prevState => ({...prevState, title:e.target.value}))
     }
     const delCom = e => {
-        currentUser ? 
+        stateOfComment.currentUser ? 
             (window.confirm('Delete this?')&&(
                 dispatch({type: DELETE_COMMENT_FETCH, 
                 payload: {commentId: stateOfComment.id, postId: props.postId}})&&
@@ -46,9 +46,7 @@ export const Comment = props => {
                 value: stateOfComment.title}});
             setEditMode(false)
         }
-        currentUser ? (
-            setEditMode(true)
-        ) : window.alert('You are not the author)')
+        setEditMode(true)
         stateOfComment.count%2!==0&&
         (stateOfComment.title!==props.commentInfo.title ? 
             dispChange(e) 
@@ -56,14 +54,14 @@ export const Comment = props => {
         setStateOfComment(prevState => ({...prevState, count: prevState.count+1}))
     }
     return(<Card className="comment_container" >
-            <ButtonGroup variant="contained" className="button_container">
+            {stateOfComment.currentUser&&<ButtonGroup variant="contained" className="button_container">
                 <Button className="button_act" size='small' onClick={changeYourComment}>
                     Change
                 </Button>
                 <Button className="button_act" size='small' color={color} onClick={delCom}>
                     Delete
                 </Button>
-            </ButtonGroup >
+            </ButtonGroup >}
                 {!editMode ? 
                 <Typography className="comment_title">
                     {stateOfComment.title} 

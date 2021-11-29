@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Alert } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
@@ -25,7 +25,7 @@ const LoginPage = props => {
     const originalLogIn = e => {
         loginPageInfo.eMail!==""&&loginPageInfo.password!=="" ?
         dispatch({type:LOG_IN_FETCH, state: loginPageInfo}) 
-        : setInfo({...loginPageInfo, errorText: "Введите-ка, сударь, все данные"})
+        : setInfo({...loginPageInfo, errorText: "Введите, пожалуйста, все данные"})
         const textFields = e.currentTarget.parentNode.querySelectorAll('input');
         for(let t of textFields){t.value=''}
     }
@@ -50,7 +50,9 @@ const LoginPage = props => {
                         LogIn
                     </Button>
                 </Link>
-                <span>{loginPageInfo.errorText}</span>
+                {loginPageInfo.errorText!==''&&<Alert variant="filled" severity="warning">
+                    {loginPageInfo.errorText}
+                </Alert>}
         </div> 
     )
 }

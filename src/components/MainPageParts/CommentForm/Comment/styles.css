@@ -11,7 +11,7 @@
     background: linear-gradient(to bottom, rgb(216, 231, 233),rgb(120, 189, 253))
 }
 .button_container{
-    margin: 10px auto;
+    margin: 10px 10px 10px auto;
     box-shadow: none;
 }
 .button_act{

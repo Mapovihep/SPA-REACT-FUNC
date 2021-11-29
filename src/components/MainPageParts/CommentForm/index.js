@@ -16,12 +16,12 @@ export const Comments = props => {
     }, [props])
     return(
         <form className='show_comments_form' style={{ display: `${props.display}`}}>
+            <InputForNewComment postId={props.postId}/>
             {stateOfPage.comments.map(newComment=>
             <Comment commentInfo={newComment}
             key={newComment.key}
             editMode={newComment.editMode}
             postId={props.postId}/>)}
-            <InputForNewComment postId={props.postId}/>
         </form>
     )
 }

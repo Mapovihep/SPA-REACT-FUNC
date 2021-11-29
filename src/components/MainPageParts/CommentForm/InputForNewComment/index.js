@@ -10,19 +10,19 @@ export const InputForNewComment = props =>{
     const [newComment, setNewComment] = useState({value: ''})
     
     const handlerOnChange = e => {
-        setNewComment(()=>{newComment.value = e.target.value;
-        return newComment})
+        setNewComment(state => ({...state, value: e.target.value}))
     }
     const handlerOnSubmit = e => {
         e.preventDefault();
         if(newComment.value!==''){
             dispatch({type: ADD_COMMENT_FETCH, payload: {value: newComment.value, postId: props.postId}});
-            e.target.value='';
+            newComment.value='';
         }
     }
     return (<div onSubmit={handlerOnSubmit} className="add_comment_form">
                 <Input placeholder="Введите свой комментарий"
                 className="add_comment_input"
+                value={newComment.value}
                 onChange={handlerOnChange}/>
                 <Button onClick={handlerOnSubmit}>Add Comment</Button>
             </div>)
