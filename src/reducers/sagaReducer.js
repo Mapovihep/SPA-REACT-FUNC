@@ -58,8 +58,9 @@ export const sagaReducer = (state = initialState, action) =>{
             }
 
         case LOG_IN:
+            localStorage.setItem('route', '')
             return {...state,
-                    loggedIn: action.payload
+                    loggedIn: action.payload,
                 } 
 
         case LOAD_PROFILE:
