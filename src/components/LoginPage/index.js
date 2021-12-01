@@ -3,18 +3,23 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import {  LOG_IN } from '../../actions/ReducerActions';
+import { routesSaver } from '../../actions/RoutesForComponents';
 import { LOAD_POSTS_FETCH, LOG_IN_FETCH } from '../../actions/SagaActions';
 import  './styles.css'
+import { useLocation } from 'react-router'
 
 const LoginPage = props => {
     const [loginPageInfo, setInfo] = useState({ eMail: '', password: '', errorText: ''})
     const dispatch = useDispatch();
+
     useEffect(()=>{
-        if(localStorage.length!==0){
+        if(localStorage.getItem('token')!==null){
             dispatch({type:LOG_IN, payload: true})
             dispatch({type:LOAD_POSTS_FETCH, payload: true})
         }
     }, [])
+    
+
     const handleChange = (e) => {
         const field = e.currentTarget;
         const type = field.id;
@@ -24,7 +29,7 @@ const LoginPage = props => {
         }
     const originalLogIn = e => {
         loginPageInfo.eMail!==""&&loginPageInfo.password!=="" ?
-        dispatch({type:LOG_IN_FETCH, state: loginPageInfo}) 
+        dispatch({type:LOG_IN_FETCH, state: loginPageInfo})
         : setInfo({...loginPageInfo, errorText: "Введите, пожалуйста, все данные"})
         const textFields = e.currentTarget.parentNode.querySelectorAll('input');
         for(let t of textFields){t.value=''}

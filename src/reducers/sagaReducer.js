@@ -16,6 +16,8 @@ const initialState = {
     posts: [],
     userProfile: [],
     loggedIn: false,
+    loaded: false,
+    loadedProfile: false
 }
 const sorting = arr => {
     let dates = [];
@@ -51,7 +53,8 @@ export const sagaReducer = (state = initialState, action) =>{
 
         case LOAD_POSTS: 
             return {...state, 
-                posts: sorting(action.payload)
+                posts: sorting(action.payload), 
+                loaded: true
             }
 
         case LOG_IN:
@@ -61,7 +64,8 @@ export const sagaReducer = (state = initialState, action) =>{
 
         case LOAD_PROFILE:
             return {...state,
-                    userProfile: action.payload
+                    userProfile: action.payload, 
+                    loadedProfile: true
                 }
                 
         case CHANGE_POST:

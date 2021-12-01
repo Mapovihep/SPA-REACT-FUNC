@@ -7,7 +7,9 @@ import { Button,
         ListItem,
         Input, 
         Typography,
-        Modal} from "@mui/material"
+        Dialog,
+        DialogTitle,
+        DialogActions} from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import React,{ useEffect, useState } from "react";
@@ -17,29 +19,30 @@ import Moment from "react-moment";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
 import { CHANGING_POST_FETCH, DELETE_POST_FETCH } from "../../../actions/SagaActions";
+import { routesSaver } from '../../../actions/RoutesForComponents';
 
 export const Post = props => {
     const [state, setPostState] = useState({...props.postInfo, 
         likeCount: 5, 
         editMode: false, 
         editStyle: 'none', 
-        actionCount: 0})  
+        actionCount: 0,
+        deleteFlag: false})  
     const [commFormState, setCommFormState] = useState({
         formCommStyle: "none", 
     })
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { pathname } = useLocation();
-
     const userId = useSelector(state => (state.saga.userProfile.id))
     useEffect(()=>{
         setPostState({...props.postInfo, 
             likeCount: 5, 
             editMode: false, 
             editStyle: 'none', 
-            actionCount: 0, 
-            deleteflag: false});
+            actionCount: 0});
         props.fromRouter!==undefined&&setPostState(state => ({...state, editStyle: 'block'}))
+        props.fromRouter!==undefined&&routesSaver(pathname)
         state.editCommentMode ?
         setCommFormState({formCommStyle: 'block'}) :
         (props.fromRouter!==undefined ? 
@@ -63,7 +66,9 @@ export const Post = props => {
         editIsOver();
     }
     const deletePost = () => {
-        setCommFormState(state => ({...state, deleteFlag: true}))
+        setPostState(state => ({...state, deleteFlag: !state.deleteFlag}))
+    }
+    deletePost.yes = () => {
         dispatch({type: DELETE_POST_FETCH, payload: state.id})
     }
     const handleClickLike = () => {
@@ -75,8 +80,11 @@ export const Post = props => {
         : setCommFormState(state => ({...state, formCommStyle: 'none'}));
     }
     const handlerRoute = () => {
+        !state.editMode&&dispatch({type: 'CHANGE_ROUTE', payload: `/posts/${state.id}`})
         pathname!==`/posts/${state.id}`&&
-        navigate(`/posts/${state.id}`)&&console.log(pathname)}
+        navigate(`/posts/${state.id}`);
+        routesSaver(`/posts/${state.id}`, 'post')
+    }
     const handlerChangePost = e =>{
         e.target.type!=='textarea' ?
         setPostState(state => ({...state, title: e.target.value}))
@@ -120,6 +128,17 @@ export const Post = props => {
                        {props.fromRouter===undefined&&<Button onClick={showComments}>Show comments ({state.comments.length})</Button>}
                         {userId===state.user_id&&<IconButton aria-label="delete" onClick={deletePost}>
                             <DeleteIcon />
+                            <Dialog
+                            open={state.deleteFlag}
+                            aria-labelledby="alert-dialog-title">
+                            <DialogTitle id="alert-dialog-title">
+                              {"Do you want to delete your post?"}
+                            </DialogTitle>
+                            <DialogActions>
+                              <Button onClick={deletePost.yes}>Yes</Button>
+                              <Button>No</Button>
+                            </DialogActions>
+                          </Dialog>
                         </IconButton>}
                         <IconButton aria-label="delete" onClick={handleClickLike} >
                             <FavoriteIcon  />

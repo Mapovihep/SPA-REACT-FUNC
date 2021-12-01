@@ -1,11 +1,12 @@
 .comment_container{
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: left;
     width: 90%;
     border-radius: 10px;
     background: linear-gradient(to bottom, rgb(216, 231, 233),rgb(153, 142, 167));
     margin: 10px auto 0 auto;
+    padding: 20px;
 }
 .comment_container:hover{
     background: linear-gradient(to bottom, rgb(216, 231, 233),rgb(120, 189, 253))
@@ -19,14 +20,15 @@
 }
 .comment_title{
     display: block;
-    width: 90%;
-    margin:  50px auto;
+    width: 75%;
     text-align: left;
+    padding-top: 20px;
 }
 .comment_title_input{
     display: block;
     margin-left: 5px;
-    width: 90%;
+    width: 75%;
+    padding: 0;
 }
 .comment_author{
     display: inline-block;

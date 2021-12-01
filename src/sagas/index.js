@@ -35,6 +35,7 @@ export function* getProfileWorker(){
 }
 export function* loadPostsWorker(){
     yield call(getPosts)
+    yield call(getProfile)
 }
 export function* addPostWorker(data){
     yield call(addUsersPost, data.payload)
